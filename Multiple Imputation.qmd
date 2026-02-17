@@ -62,8 +62,8 @@ set.seed(1895)
 data_star <- read_sav(
   "https://raw.githubusercontent.com/sammerk/GRAPH-Missing-Data/master/data_missing_workshop.sav"
 ) %>% 
-    group_by(classID) %>%
-    slice_sample(n = 1) %>%
+    group_by(g3tchid) %>%
+    sample_n(1) %>%
     ungroup()
 
 label_browser_static(data_star)
@@ -72,8 +72,36 @@ label_browser_static(data_star)
 > Forschungsfragen: Wie wirkt sich die Klassengröße auf die Lese-, Mathematikleistung und Partizipation aus? Gibt differentielle Effekte nach SES?
 
 ## Missingness Patters
-
 ```{r}
 library(naniar)
-vis_miss(data_star)
+vis_miss(data_star, sort_miss = TRUE, cluster = TRUE)
 ```
+
+## (Co-)Variation und Verteilung der Daten
+```{r}
+library(GGally)
+ggpairs(
+  data_star %>% 
+    select(starts_with("g4"), -g4tchid, g3freelunch, g3classsize) %>% 
+    mutate(across(c(starts_with("g4pt"), g3freelunch), as.factor))
+)
+```
+
+## Missing Mechanisms
+```{r}
+library(ggplot2)
+library(ggmice)
+ggplot(data_star, aes(x = g3freelunch, y = g3tmathss)) +
+  geom_miss_point(jitter = 0.1) +
+  theme_minimal()
+```
+
+## Imputation
+```{r}
+library(mice)   
+
+data_star_imp <- mice(
+  data_star %>% select(-g3tchid), 
+  m = 5, 
+  seed = 1895
+)
