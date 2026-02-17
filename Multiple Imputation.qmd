@@ -56,8 +56,24 @@ Um zunächst das Problem genesteter Daten zu umgehen, verwenden wir nur die Date
 ```{r}
 library(haven)
 library(dplyr)
+library(codebook)
 
+set.seed(1895)
 data_star <- read_sav(
-  "https://raw.githubusercontent.com/sammerk/GRAPH-Missing-Data/master/data_star_workshop.sav"
-)
+  "https://raw.githubusercontent.com/sammerk/GRAPH-Missing-Data/master/data_missing_workshop.sav"
+) %>% 
+    group_by(classID) %>%
+    slice_sample(n = 1) %>%
+    ungroup()
+
+label_browser_static(data_star)
+```
+
+> Forschungsfragen: Wie wirkt sich die Klassengröße auf die Lese-, Mathematikleistung und Partizipation aus? Gibt differentielle Effekte nach SES?
+
+## Missingness Patters
+
+```{r}
+library(naniar)
+vis_miss(data_star)
 ```

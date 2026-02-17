@@ -368,7 +368,7 @@
     "href": "Multiple Imputation.html#datengrundlage",
     "title": "Multiple Imputation",
     "section": "3.1 Datengrundlage",
-    "text": "3.1 Datengrundlage\nIm Minimalbeispiel gibt es die folgenden Variablen:\n\ny_mar_comp: Komplette Werte der Zielvariable\ny_mar_beob: Beobachtete Werte der Zielvariable unter MAR\nr_mar: Missingness-Indikator der Zielvariable unter MAR\nx_met_beob: Beobachtete Werte eines metrischen Prädiktors\nx_ord_beob: Beobachtete Werte eines ordinalen Prädiktors\nx_kat_beob: Beobachtete Werte eines kategorialen Prädiktors\ny_miss: Fehlende Werte der Zielvariable\nx_met_miss: Fehlende Werte eines metrischen Prädiktors\nx_ord_miss: Fehlende Werte eines ordinalen Prädiktors\nx_kat_miss: Fehlende Werte eines kategorialen Prädiktors\ny_mnar_comp: Komplette Werte der Zielvariable unter MNAR",
+    "text": "3.1 Datengrundlage\nAls Datengrundlage verwenden wir einen Ausschnitt des STAR-Experiments, indem die experimentell die Wirkung einer Klassengrößenreduktion auf die Schulleistung untersucht wurde (Word, 1990). Um zunächst das Problem genesteter Daten zu umgehen, verwenden wir nur die Daten je einer Schüler:in pro Klasse. Die Daten enthalten die folgenden Variablen:\n\nlibrary(haven)\nlibrary(dplyr)\nlibrary(codebook)\n\ndata_star &lt;- read_sav(\n  \"https://raw.githubusercontent.com/sammerk/GRAPH-Missing-Data/master/data_missing_workshop.sav\"\n)\n\nlabel_browser_static(data_star)",
     "crumbs": [
       "Multiple Imputation"
     ]
