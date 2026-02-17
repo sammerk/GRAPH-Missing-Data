@@ -3,6 +3,7 @@ title: "Maximum Likelihood"
 format: html
 toc: true    
 lang: de
+embed-resources: true
 ---
 
 # Überblick

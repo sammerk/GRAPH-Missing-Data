@@ -4,7 +4,7 @@ project:
 
 execute:
   freeze: auto
-#  cache: true  
+cache: true  
 
 lang: de
 
@@ -22,12 +22,14 @@ website:
       - Diagnose fehlender Werte.qmd
       - Nonsolutions.qmd
       - Maximum Likelihood.qmd
-      - Bayesian Imutation during Model Fitting.qmd
+      - Bayesian Imputation During Model Fitting.qmd
+      - Multiple Imputation.qmd
 
 
 format:
   live-html:
     lightbox: true
+    embed-resources: true
     tbl-cap-location: bottom
     toc: true
     toc-depth: 3

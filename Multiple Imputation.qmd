@@ -49,4 +49,16 @@ Diese Schritte werden im folgenden artifiziellen Minimalbeispiel Schritt für Sc
 # Ein `{mice}`-Minimalbeispiel
 
 ## Datengrundlage
-Im Minimalbeispiel 
+Im Minimalbeispiel gibt es die folgenden Variablen:
+
+* `y_mar_comp`: Komplette Werte der Zielvariable
+* `y_mar_beob`: Beobachtete Werte der Zielvariable unter MAR
+* `r_mar`: Missingness-Indikator der Zielvariable unter MAR
+* `x_met_beob`: Beobachtete Werte eines metrischen Prädiktors
+* `x_ord_beob`: Beobachtete Werte eines ordinalen Prädiktors
+* `x_kat_beob`: Beobachtete Werte eines kategorialen Prädiktors
+* `y_miss`: Fehlende Werte der Zielvariable
+* `x_met_miss`: Fehlende Werte eines metrischen Prädiktors
+* `x_ord_miss`: Fehlende Werte eines ordinalen Prädiktors
+* `x_kat_miss`: Fehlende Werte eines kategorialen Prädiktors
+* `y_mnar_comp`: Komplette Werte der Zielvariable unter MNAR

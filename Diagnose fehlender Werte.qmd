@@ -34,6 +34,7 @@ Univariate, monotone und arbiträre Verteilungen fehlender Werte werden meistens
 
 ### Beispiel: Monotone Verteilung fehlender Werte
 ```{r}
+#| label: fig-misspattern
 #| message: false
 #| warning: false
 library(tibble)

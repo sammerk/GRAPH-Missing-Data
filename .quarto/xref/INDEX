@@ -58,5 +58,8 @@
   },
   "Multiple Imputation.qmd": {
     "Multiple Imputation.html": "d3869490"
+  },
+  "Bayesian Imputation During Model Fitting.qmd": {
+    "Bayesian Imputation During Model Fitting.html": "c9b45f65"
   }
 }
