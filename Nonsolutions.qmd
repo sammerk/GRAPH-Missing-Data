@@ -1,0 +1,36 @@
+---
+title: "Nonsolutions"
+format:
+  live-html:
+    css: 
+      - exams/webex.css
+    include-after-body: exams/webex.js
+webr:
+  packages:
+    - dplyr
+    - ggplot2
+    - haven
+    - naniar
+    - Amelia
+toc: true    
+lang: de
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# Überblick
+In den allermeistens Fällen sind 
+
+* Case und List Wise Deletion,
+* Mean Imputation und
+* Regression Imputation
+
+problematische Methoden zum Umgang mit fehlenden Werten, die zu verzerrten Ergebnissen führen können.
+
+::: {.callout icon=false}
+## {{< iconify fa7-solid:person-digging >}} Übung: Nonsolutions
+* Warum kann die Verwendung von Case und List Wise Deletion selbst unter MCAR problematisch sein?
+* Welche Probleme könnten bei der Verwendung von Mean oder Regression Imputation auftreten?
+:::
+
+

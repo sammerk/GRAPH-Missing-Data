@@ -1,0 +1,62 @@
+{
+  "index.qmd": {
+    "index.html": "0a755004"
+  },
+  "LICENSE.md": {
+    "LICENSE.html": "03810ae5"
+  },
+  "exams/Grundbegriffe-Regression-erkennen.Rmd": {
+    "Grundbegriffe-Regression-erkennen.html": "ce8b101e"
+  },
+  "exams/regressionsebene-interpretieren.Rmd": {
+    "regressionsebene-interpretieren.html": "1093b235"
+  },
+  "exams/Deskriptive_Explorative_Explanative_Praediktive_Studien_Laengsschnitt.Rmd": {
+    "Deskriptive_Explorative_Explanative_Praediktive_Studien_Laengsschnitt.html": "546be7f5"
+  },
+  "exams/Deskriptive_Explorative_Explanative_Studien_r.Rmd": {
+    "Deskriptive_Explorative_Explanative_Studien_r.html": "933dd37c"
+  },
+  "exams/Scatterplot-BESD-zuordnen.Rmd": {
+    "Scatterplot-BESD-zuordnen.html": "a1d81d7b"
+  },
+  "exams/einfache-reg-rechteck.Rmd": {
+    "einfache-reg-rechteck.html": "09451a65"
+  },
+  "exams/Laengsschnitttliche_Studie_erkennen.Rmd": {
+    "Laengsschnitttliche_Studie_erkennen.html": "00dd54fd"
+  },
+  "exams/g3classsize_g3tmathss_graph_sc.Rmd": {
+    "g3classsize_g3tmathss_graph_sc.html": "b8b8c6b3"
+  },
+  "exams/methodische-strenge-vergleichen.Rmd": {
+    "methodische-strenge-vergleichen.html": "6d72890e"
+  },
+  "exams/BESD-Scatterplot-zuordnen.Rmd": {
+    "BESD-Scatterplot-zuordnen.html": "fc1d3bd2"
+  },
+  "Einfache lineare Regression.qmd": {
+    "Einfache lineare Regression.html": "a6f5c57c"
+  },
+  "Multiple lineare Regression.qmd": {
+    "Multiple lineare Regression.html": "30fd5548"
+  },
+  "Missing Data Handling im Überblick.qmd": {
+    "Missing Data Handling im Überblick.html": "dff5fe26"
+  },
+  "Diagnose fehlender Werte.qmd": {
+    "Diagnose fehlender Werte.html": "7c086883"
+  },
+  "Maximum Likelihood.qmd": {
+    "Maximum Likelihood.html": "3a5db742"
+  },
+  "Nonsolutions.qmd": {
+    "Nonsolutions.html": "252fc287"
+  },
+  "Bayesian Imutation during Model Fitting.qmd": {
+    "Bayesian Imutation during Model Fitting.html": "ff0a654c"
+  },
+  "Multiple Imputation.qmd": {
+    "Multiple Imputation.html": "d3869490"
+  }
+}

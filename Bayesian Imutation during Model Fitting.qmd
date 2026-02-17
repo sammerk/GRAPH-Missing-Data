@@ -1,0 +1,73 @@
+---
+title: "Bayesian Imutation during Model Fitting"
+format: html
+toc: true    
+lang: de
+---
+
+# Überblick
+Das zentrale Problem einer Mean oder Single Imputation ist, dass bei anschließender Modellschätzung die imputierten Daten nicht von den beobachteten Daten unterschieden werden können. Dadurch können Parameter und deren Unsicherheit nicht korrekt geschätzt werden.
+Bayesian Imputation during Model Fitting (BIMF) ist eine Methode, die dieses Problem adressiert, indem sie die fehlenden Werte als zusätzliche Parameter in das Modell integriert für diese Priors anniment und anhand der Daten Posteriors schätzt. Im Posterior kann die Unsicherheit der fehlenden Werte formalisiert und deren Einfluss auf die Modellparameter bei anschließender Schätzung berücksichtigt werden.
+
+## Umsetzung in `{brms}`
+::: {.callout-warning}
+## Achtung: `stan`-Installation notwendig
+In den folgenden Beispielen wird das R-Paket `{brms}` verwendet. Dieses Paket basiert auf der probabilistischen Programmiersprache `stan`, die für die Durchführung von Bayesianischen Analysen notwendig ist. Die Installation von `stan` kann je nach Betriebssystem und R-Version komplex sein. Es wird empfohlen, [diese](https://learnb4ss.github.io/learnB4SS/articles/install-brms.html) Installationsanleitung zu befolgen.
+:::
+
+In `{brms}` kann BIMF mit der `mi()`-Funktion implementiert werden, die es ermöglicht, fehlende Werte als zusätzliche Parameter in das Modell zu integrieren. Hier ist ein einfaches Beispiel, wie dies umgesetzt werden kann:
+
+```{r}
+library(brms)
+library(tidyverse)
+library(naniar)
+set.seed(1895)
+N <- 400
+
+data_mar <-
+  tibble(
+    x = rnorm(N),
+    # 0.5 ist die Stärke des Zusammenhangs zwischen x und y_comp
+    y_comp = 2 + 0.1 * x + rnorm(N),
+    # Die Wahrscheinlichkeit, dass y_beob fehlt, hängt von x ab
+    r = rbinom(N, 1, prob = plogis(1 * x)),
+    y_beob = ifelse(r == 0, y_comp, NA),
+    y_mis = ifelse(r == 1, y_comp, NA)
+  )
+
+# Plot der randverteilungen von beobachteten und fehlenden Werten
+ggplot(data_mar, aes(x = x, y = y_beob)) +
+  geom_miss_point() +
+  # Regression der beobachteten Werte
+  geom_smooth(method = "lm", se = FALSE, color = "#267326") +
+  # Regression aller Werte (inkl. fehlende Werte, die hier als NA dargestellt werden)
+  geom_smooth(
+    aes(y = y_comp),
+    method = "lm",
+    se = FALSE,
+    color = "#267326",
+    linetype = "dashed"
+  ) +
+  # mean(y_comp)
+  geom_hline(
+    yintercept = mean(data_mar$y_comp, na.rm = TRUE),
+    linetype = "dashed",
+    color = "#267326"
+  ) +
+  # mean(y_beob)
+  geom_hline(
+    yintercept = mean(data_mar$y_beob, na.rm = TRUE),
+    color = "#267326"
+  ) +
+  labs(caption = "Gestrichelte Linie entspricht der »wahren Regression«") +
+  theme_minimal()
+```
+
+```{r}
+#| cache: true
+brm(y_comp ~ x, data = data_mar, silent = 2, refresh = 0)
+brm(y_beob ~ x, data = data_mar, silent = 2, refresh = 0)
+brm(bf(y_beob | mi() ~ x), data = data_mar, silent = 2, refresh = 0)
+```    
+    
+

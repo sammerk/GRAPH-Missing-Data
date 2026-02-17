@@ -1,0 +1,594 @@
+{
+    "sources": [
+        {
+            "DOI": "10.1177/2515245917745629",
+            "ISSN": "2515-2459",
+            "author": [
+                {
+                    "family": "Rohrer",
+                    "given": "Julia M."
+                }
+            ],
+            "container-title": "Advances in Methods and Practices in Psychological Science",
+            "id": "rohrer2018",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        2018
+                    ]
+                ]
+            },
+            "keyword": "12,17,9,directed acyclic graphs,face a dilemma,psychologists in many fields,received 8,revision accepted 11,whereas",
+            "language": "en-US",
+            "page": "27-42",
+            "title": "Thinking clearly about correlations and causation: Graphical causal models for observational data",
+            "title-short": "Thinking clearly about correlations and causation",
+            "type": "article-journal",
+            "volume": "1"
+        },
+        {
+            "DOI": "10.1080/15248371003699969",
+            "URL": "http://dx.doi.org/10.1080/15248371003699969",
+            "author": [
+                {
+                    "family": "Curran",
+                    "given": "Patrick J."
+                },
+                {
+                    "family": "Obeidat",
+                    "given": "Khawla"
+                },
+                {
+                    "family": "Losardo",
+                    "given": "Diane"
+                }
+            ],
+            "container-title": "Journal of Cognition and Development",
+            "id": "curran2010",
+            "issue": "2",
+            "issued": {
+                "date-parts": [
+                    [
+                        2010,
+                        4,
+                        30
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "121-136",
+            "title": "Twelve Frequently Asked Questions About Growth Curve Modeling",
+            "type": "article-journal",
+            "volume": "11"
+        },
+        {
+            "URL": "http://dx.doi.org/10.1007/978-3-642-41089-5",
+            "author": [
+                {
+                    "family": "Döring",
+                    "given": "Nicola"
+                },
+                {
+                    "family": "Bortz",
+                    "given": "Jürgen"
+                }
+            ],
+            "edition": "5",
+            "id": "döring2016",
+            "issued": {
+                "date-parts": [
+                    [
+                        2016
+                    ]
+                ]
+            },
+            "language": "de",
+            "note": "Citation Key: doering2016",
+            "publisher": "Springer",
+            "publisher-place": "Berlin, Heidelberg",
+            "title": "Forschungsmethoden und Evaluation in den Sozial- und Humanwissenschaften",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Shadish",
+                    "given": "William R."
+                },
+                {
+                    "family": "Cook",
+                    "given": "Thomas D."
+                },
+                {
+                    "family": "Campbell",
+                    "given": "Donald T."
+                }
+            ],
+            "id": "shadish2001",
+            "issued": {
+                "date-parts": [
+                    [
+                        2001
+                    ]
+                ]
+            },
+            "note": "Citation Key: shadish2001",
+            "publisher": "Houghton Mifflin",
+            "publisher-place": "Boston",
+            "title": "Experimental and quasi-experimental designs for generalized causal inference",
+            "type": "book"
+        },
+        {
+            "DOI": "10.1037/h0040950",
+            "URL": "http://doi.apa.org/getdoi.cfm?doi=10.1037/h0040950",
+            "author": [
+                {
+                    "family": "Campbell",
+                    "given": "Donald T."
+                }
+            ],
+            "container-title": "Psychological Bulletin",
+            "id": "campbell1957",
+            "issue": "4",
+            "issued": {
+                "date-parts": [
+                    [
+                        1957
+                    ]
+                ]
+            },
+            "language": "en",
+            "page": "297-312",
+            "title": "Factors relevant to the validity of experiments in social settings",
+            "type": "article-journal",
+            "volume": "54"
+        },
+        {
+            "author": [
+                {
+                    "family": "Cook",
+                    "given": "Thomas D."
+                },
+                {
+                    "family": "Campbell",
+                    "given": "Donald T."
+                }
+            ],
+            "id": "cook1979",
+            "issued": {
+                "date-parts": [
+                    [
+                        1979
+                    ]
+                ]
+            },
+            "language": "eng",
+            "note": "Citation Key: cook1979",
+            "publisher": "McNally",
+            "publisher-place": "Chicago",
+            "title": "Quasi-experimentation: Design & analysis issues for field settings",
+            "title-short": "Quasi-experimentation",
+            "type": "book"
+        },
+        {
+            "author": [
+                {
+                    "family": "Word",
+                    "given": "Elizabeth R."
+                }
+            ],
+            "id": "word1990",
+            "issued": {
+                "date-parts": [
+                    [
+                        1990
+                    ]
+                ]
+            },
+            "page": "398",
+            "title": "The state of tennessee’s student/teacher achievement ratio (STAR) project: Technical report (1985-1990).",
+            "title-short": "The state of tennessee’s student/teacher achievement ratio (STAR) project",
+            "type": "report"
+        },
+        {
+            "URL": "https://onlinelibrary.wiley.com/doi/10.1002/0470013192.bsa050",
+            "author": [
+                {
+                    "family": "Rosenthal",
+                    "given": "Robert"
+                }
+            ],
+            "edition": "1",
+            "editor": [
+                {
+                    "family": "Everitt",
+                    "given": "Brian S."
+                },
+                {
+                    "family": "Howell",
+                    "given": "David C."
+                }
+            ],
+            "id": "rosenthal2005",
+            "issued": {
+                "date-parts": [
+                    [
+                        2005,
+                        4,
+                        15
+                    ]
+                ]
+            },
+            "language": "en",
+            "note": "DOI: 10.1002/0470013192.bsa050 Citation Key: rosenthal2005",
+            "publisher": "Wiley",
+            "title": "Binomial Effect Size Display",
+            "type": "chapter"
+        },
+        {
+            "author": [
+                {
+                    "family": "Fechner",
+                    "given": "Gustav Theodor"
+                }
+            ],
+            "id": "fechner1897",
+            "issued": {
+                "date-parts": [
+                    [
+                        1897
+                    ]
+                ]
+            },
+            "language": "de",
+            "note": "Google-Books-ID: nCP1TiR2CjkC Citation Key: fechner1897",
+            "publisher": "Wilhelm Engelmann",
+            "title": "Kollektivmasslehre",
+            "type": "book"
+        },
+        {
+            "DOI": "10.1201/9781420011579",
+            "editor": [
+                {
+                    "family": "Fitzmaurice",
+                    "given": "Garrett"
+                },
+                {
+                    "family": "Davidian",
+                    "given": "Marie"
+                },
+                {
+                    "family": "Verbeke",
+                    "given": "Geert"
+                },
+                {
+                    "family": "Molenberghs",
+                    "given": "Geert"
+                }
+            ],
+            "id": "longitud2008",
+            "issued": {
+                "date-parts": [
+                    [
+                        2008,
+                        8,
+                        11
+                    ]
+                ]
+            },
+            "publisher": "Chapman; Hall/CRC",
+            "publisher-place": "New York",
+            "title": "Longitudinal data analysis",
+            "type": "book"
+        },
+        {
+            "DOI": "10.1016/j.dcn.2023.101281",
+            "ISSN": "1878-9293",
+            "PMCID": "PMC10412784",
+            "PMID": "37536082",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2025,
+                        12,
+                        24
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "family": "McCormick",
+                    "given": "Ethan M."
+                },
+                {
+                    "family": "Byrne",
+                    "given": "Michelle L."
+                },
+                {
+                    "family": "Flournoy",
+                    "given": "John C."
+                },
+                {
+                    "family": "Mills",
+                    "given": "Kathryn L."
+                },
+                {
+                    "family": "Pfeifer",
+                    "given": "Jennifer H."
+                }
+            ],
+            "container-title": "Developmental Cognitive Neuroscience",
+            "id": "mccormick2023",
+            "issued": {
+                "date-parts": [
+                    [
+                        2023,
+                        7
+                    ]
+                ]
+            },
+            "page": "101281",
+            "title": "The Hitchhiker’s guide to longitudinal models: A primer on model selection for repeated-measures methods",
+            "title-short": "The Hitchhiker’s guide to longitudinal models",
+            "type": "article-journal",
+            "volume": "63"
+        },
+        {
+            "author": [
+                {
+                    "family": "Hedeker",
+                    "given": "D R"
+                },
+                {
+                    "family": "Gibbons",
+                    "given": "R D"
+                }
+            ],
+            "id": "hedeker2006",
+            "issued": {
+                "date-parts": [
+                    [
+                        2006
+                    ]
+                ]
+            },
+            "publisher": "Wiley",
+            "title": "Longitudinal data analysis",
+            "type": "book"
+        },
+        {
+            "annote": "https://doi.org/10.7910/DVN/SIWH9F",
+            "author": [
+                {
+                    "family": "Achilles",
+                    "given": "C. M."
+                },
+                {
+                    "family": "Bain",
+                    "given": "Helen Pate"
+                },
+                {
+                    "family": "Bellot",
+                    "given": "F."
+                },
+                {
+                    "family": "Boyd-Zaharias",
+                    "given": "J."
+                },
+                {
+                    "family": "Finn",
+                    "given": "J."
+                },
+                {
+                    "family": "Folger",
+                    "given": "J."
+                },
+                {
+                    "family": "Johnston",
+                    "given": "John"
+                },
+                {
+                    "family": "Word",
+                    "given": "Elizabeth"
+                }
+            ],
+            "genre": "Technical {{Report}}",
+            "id": "achilles1985",
+            "issued": {
+                "date-parts": []
+            },
+            "language": "en-US",
+            "publisher": "Tennessee State Department of Educatbn",
+            "title": "The state of Tennessee’s student/teacher achievement ratio (STAR) project",
+            "type": "report"
+        },
+        {
+            "DOI": "10.15626/MP.2020.2595",
+            "ISSN": "2003-2714",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2025,
+                        2,
+                        12
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "family": "Mackinnon",
+                    "given": "Sean"
+                },
+                {
+                    "family": "Curtis",
+                    "given": "Robin"
+                },
+                {
+                    "family": "O’Connor",
+                    "given": "Roisin"
+                }
+            ],
+            "container-title": "Meta-Psychology",
+            "id": "mackinnon2022",
+            "issued": {
+                "date-parts": [
+                    [
+                        2022,
+                        4
+                    ]
+                ]
+            },
+            "keyword": "cross-lagged panel,lavaan,measurement invariance,perfectionism,R,social anxiety,tutorial",
+            "language": "en-US",
+            "title": "A Tutorial in Longitudinal Measurement Invariance and Cross-lagged Panel Models Using Lavaan",
+            "type": "article-journal",
+            "volume": "6"
+        },
+        {
+            "DOI": "10.1037/a0038889",
+            "ISSN": "1939-1463, 1082-989X",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2022,
+                        7,
+                        13
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "family": "Hamaker",
+                    "given": "Ellen L."
+                },
+                {
+                    "family": "Kuiper",
+                    "given": "Rebecca M."
+                },
+                {
+                    "family": "Grasman",
+                    "given": "Raoul P. P. P."
+                }
+            ],
+            "container-title": "Psychological Methods",
+            "id": "hamaker2015",
+            "issue": "1",
+            "issued": {
+                "date-parts": [
+                    [
+                        2015
+                    ]
+                ]
+            },
+            "language": "en-US",
+            "page": "102-116",
+            "title": "A critique of the cross-lagged panel model",
+            "type": "article-journal",
+            "volume": "20"
+        },
+        {
+            "accessed": {
+                "date-parts": [
+                    [
+                        2026,
+                        2,
+                        2
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "family": "Rohrer",
+                    "given": "Julia"
+                }
+            ],
+            "chapter-number": "Causal inference",
+            "container-title": "The 100% CI",
+            "id": "rohrer2025b",
+            "issued": {
+                "date-parts": [
+                    [
+                        2025,
+                        6
+                    ]
+                ]
+            },
+            "language": "en-GB",
+            "title": "Reviewer notes: So you’re interested in “lagged effects.”",
+            "title-short": "Reviewer notes",
+            "type": ""
+        },
+        {
+            "ISBN": "978-0-367-13991-9",
+            "author": [
+                {
+                    "family": "McElreath",
+                    "given": "Richard"
+                }
+            ],
+            "collection-title": "CRC texts in statistical science",
+            "edition": "2",
+            "id": "mcelreath2020",
+            "issued": {
+                "date-parts": [
+                    [
+                        2020
+                    ]
+                ]
+            },
+            "language": "en-US",
+            "publisher": "Taylor and Francis, CRC Press",
+            "publisher-place": "Boca Raton",
+            "title": "Statistical rethinking: A Bayesian course with examples in R and Stan",
+            "title-short": "Statistical rethinking",
+            "type": "book"
+        },
+        {
+            "DOI": "10.1177/00491241221099552",
+            "ISSN": "0049-1241",
+            "accessed": {
+                "date-parts": [
+                    [
+                        2024,
+                        10,
+                        13
+                    ]
+                ]
+            },
+            "author": [
+                {
+                    "family": "Cinelli",
+                    "given": "Carlos"
+                },
+                {
+                    "family": "Forney",
+                    "given": "Andrew"
+                },
+                {
+                    "family": "Pearl",
+                    "given": "Judea"
+                }
+            ],
+            "container-title": "Sociological Methods & Research",
+            "id": "cinelli2024",
+            "issue": "3",
+            "issued": {
+                "date-parts": [
+                    [
+                        2024,
+                        8
+                    ]
+                ]
+            },
+            "language": "en-US",
+            "page": "1071-1104",
+            "title": "A Crash Course in Good and Bad Controls",
+            "type": "article-journal",
+            "volume": "53"
+        }
+    ],
+    "project_biblios": [
+        "references.bib"
+    ]
+}
