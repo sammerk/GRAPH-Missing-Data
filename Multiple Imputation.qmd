@@ -49,3 +49,15 @@ Diese Schritte werden im folgenden Beispiel Schritt für Schritt bearbeitet
 # Ein `{mice}`-Beispiel
 
 ## Datengrundlage
+Als Datengrundlage verwenden wir einen Ausschnitt des STAR-Experiments, indem die experimentell die Wirkung einer Klassengrößenreduktion auf die Schulleistung untersucht wurde [@word1990].
+Um zunächst das Problem genesteter Daten zu umgehen, verwenden wir nur die Daten je einer Schüler:in pro Klasse. Die Daten enthalten die folgenden Variablen:
+
+
+```{r}
+library(haven)
+library(dplyr)
+
+data_star <- read_sav(
+  "https://raw.githubusercontent.com/sammerk/GRAPH-Missing-Data/master/data_star_workshop.sav"
+)
+```
