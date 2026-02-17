@@ -44,7 +44,8 @@ write_sav(
       g3classtype,
       g1selfconcraw,
       g2selfconcraw,
-      g3selfconcraw
+      g3selfconcraw,
+      starts_with("g4pt")
     ) %>%
     mutate(
       classID = case_when(

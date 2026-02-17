@@ -44,21 +44,8 @@ Im Umfeld des `{mice}`-Packages in R ist zu diesem Workflow auch die folgende Te
 
 # Multiple Imputation in `{mice}`
 Im oben beschriebenen Workflow ist die multiple Imputation besonders herausfordernd. Sie muss auf die diversen Arten (Skalenniveau, Kontinuität) und Verteilungen von Daten angepasst werden, die Missingness Patterns berücksichtigen und jeweils **alle** Prädiktoren der Missingness enthalten.
-Diese Schritte werden im folgenden artifiziellen Minimalbeispiel Schritt für Schritt bearbeitet
+Diese Schritte werden im folgenden Beispiel Schritt für Schritt bearbeitet
 
-# Ein `{mice}`-Minimalbeispiel
+# Ein `{mice}`-Beispiel
 
 ## Datengrundlage
-Im Minimalbeispiel gibt es die folgenden Variablen:
-
-* `y_mar_comp`: Komplette Werte der Zielvariable
-* `y_mar_beob`: Beobachtete Werte der Zielvariable unter MAR
-* `r_mar`: Missingness-Indikator der Zielvariable unter MAR
-* `x_met_beob`: Beobachtete Werte eines metrischen Prädiktors
-* `x_ord_beob`: Beobachtete Werte eines ordinalen Prädiktors
-* `x_kat_beob`: Beobachtete Werte eines kategorialen Prädiktors
-* `y_miss`: Fehlende Werte der Zielvariable
-* `x_met_miss`: Fehlende Werte eines metrischen Prädiktors
-* `x_ord_miss`: Fehlende Werte eines ordinalen Prädiktors
-* `x_kat_miss`: Fehlende Werte eines kategorialen Prädiktors
-* `y_mnar_comp`: Komplette Werte der Zielvariable unter MNAR

@@ -196,13 +196,16 @@ mcar_test(data_mar %>% select(y_beob, x))
 
 ## Missing not at Random
 ```{webr}
+# Stichprobengröße
+N <- 100
+
 data_mnar <-
   tibble(
     x = rnorm(N),
     # 0.5 ist die Stärke des Zusammenhangs zwischen x und y_comp
     y_comp = 2 + 0.1 * x + rnorm(N),
     # Die Wahrscheinlichkeit, dass y_beob fehlt, hängt von y_comp ab
-    r = rbinom(N, 1, prob = plogis(-.5 + .1 * y_comp)),
+    r = rbinom(N, 1, prob = plogis(-3 + 1 * y_comp)),
     y_beob = ifelse(r == 0, y_comp, NA),
     y_mis = ifelse(r == 1, y_comp, NA)
   )

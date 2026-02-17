@@ -16,6 +16,7 @@ Der Münzwurf (Bernoulli-Verteilung) wird als datengenerierender Mechanismus ang
 Die Likelihood für die beobachteten Daten (3 Kopf, 1 Zahl) lässt sich mit einem Bäumchen bestimmen und ist $L(\theta) = 4 \cdot \theta^3 \cdot (1-\theta)^1$. Plottet man nun diese Likelihood gegen $\theta$, so erhält man den folgenden Graphen:
 
 ```{r}
+#| label: fig-likelihood
 #| out-width: 40%
 library(ggplot2)
 
@@ -47,6 +48,7 @@ Wir starten eine Intuition für den Likelihood basierten Umgang mit fehlenden We
     * mit dem Likelihood basierten Umgang mit fehlenden Werten schätzen und die Ergebnisse vergleichen.
 
 ```{r}
+#| label: fig-likelihoodlavaan
 library(lavaan)
 library(semTools)
 library(tibble)
