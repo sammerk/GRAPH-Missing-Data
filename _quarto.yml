@@ -29,7 +29,6 @@ website:
 format:
   live-html:
     lightbox: true
-    embed-resources: true
     tbl-cap-location: bottom
     toc: true
     toc-depth: 3

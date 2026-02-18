@@ -105531,27 +105531,27 @@ Attaching package: &#39;ggmice&#39;</code></pre>
 <section id="gepoolte-imputierte-regression" class="level3" data-number="3.7.1">
 <h3 data-number="3.7.1" class="anchored" data-anchor-id="gepoolte-imputierte-regression"><span class="header-section-number">3.7.1</span> Gepoolte Imputierte Regression</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>reg_fit <span class="ot">&lt;-</span> <span class="fu">with</span>(data_art_imp, <span class="fu">lm</span>(y_beob <span class="sc">~</span> x_beob))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>reg_fit <span class="ot">&lt;-</span> <span class="fu">with</span>(data_art_imp, <span class="fu">lm</span>(<span class="fu">scale</span>(y_beob) <span class="sc">~</span> <span class="fu">scale</span>(x_beob)))</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_fit)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 7
-   term        estimate std.error statistic  p.value  nobs df.residual
-   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;       &lt;dbl&gt;
- 1 (Intercept)    1.93     0.0310      62.3 0         1000         998
- 2 x_beob         0.350    0.0312      11.2 1.56e-27  1000         998
- 3 (Intercept)    1.95     0.0300      64.9 0         1000         998
- 4 x_beob         0.366    0.0302      12.1 1.47e-31  1000         998
- 5 (Intercept)    1.89     0.0305      62.0 0         1000         998
- 6 x_beob         0.377    0.0308      12.3 2.93e-32  1000         998
- 7 (Intercept)    1.87     0.0302      61.9 0         1000         998
- 8 x_beob         0.359    0.0304      11.8 3.49e-30  1000         998
- 9 (Intercept)    1.90     0.0301      63.0 0         1000         998
-10 x_beob         0.335    0.0303      11.1 7.09e-27  1000         998</code></pre>
+   term           estimate std.error statistic   p.value  nobs df.residual
+   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;       &lt;dbl&gt;
+ 1 (Intercept)   -2.85e-16    0.0298 -9.55e-15 1.000e+ 0  1000         998
+ 2 scale(x_beob)  3.34e- 1    0.0298  1.12e+ 1 1.56 e-27  1000         998
+ 3 (Intercept)   -2.09e-15    0.0295 -7.07e-14 1.000e+ 0  1000         998
+ 4 scale(x_beob)  3.58e- 1    0.0296  1.21e+ 1 1.47 e-31  1000         998
+ 5 (Intercept)   -1.65e-15    0.0295 -5.60e-14 1.000e+ 0  1000         998
+ 6 scale(x_beob)  3.62e- 1    0.0295  1.23e+ 1 2.93 e-32  1000         998
+ 7 (Intercept)    8.58e-16    0.0296  2.90e-14 1.000e+ 0  1000         998
+ 8 scale(x_beob)  3.50e- 1    0.0297  1.18e+ 1 3.49 e-30  1000         998
+ 9 (Intercept)   -1.21e-16    0.0299 -4.06e-15 1.000e+ 0  1000         998
+10 scale(x_beob)  3.30e- 1    0.0299  1.11e+ 1 7.09 e-27  1000         998</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>reg_fit</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>call :
-with.mids(data = data_art_imp, expr = lm(y_beob ~ x_beob))
+with.mids(data = data_art_imp, expr = lm(scale(y_beob) ~ scale(x_beob)))
 
 call1 :
 mice(data = data_art %&gt;% select(x_beob, y_beob), m = 5, seed = 1895)
@@ -105563,51 +105563,51 @@ analyses :
 [[1]]
 
 Call:
-lm(formula = y_beob ~ x_beob)
+lm(formula = scale(y_beob) ~ scale(x_beob))
 
 Coefficients:
-(Intercept)       x_beob  
-     1.9309       0.3497  
+  (Intercept)  scale(x_beob)  
+   -2.847e-16      3.343e-01  
 
 
 [[2]]
 
 Call:
-lm(formula = y_beob ~ x_beob)
+lm(formula = scale(y_beob) ~ scale(x_beob))
 
 Coefficients:
-(Intercept)       x_beob  
-     1.9465       0.3657  
+  (Intercept)  scale(x_beob)  
+   -2.088e-15      3.578e-01  
 
 
 [[3]]
 
 Call:
-lm(formula = y_beob ~ x_beob)
+lm(formula = scale(y_beob) ~ scale(x_beob))
 
 Coefficients:
-(Intercept)       x_beob  
-     1.8930       0.3769  
+  (Intercept)  scale(x_beob)  
+   -1.653e-15      3.616e-01  
 
 
 [[4]]
 
 Call:
-lm(formula = y_beob ~ x_beob)
+lm(formula = scale(y_beob) ~ scale(x_beob))
 
 Coefficients:
-(Intercept)       x_beob  
-     1.8688       0.3589  
+  (Intercept)  scale(x_beob)  
+    8.582e-16      3.500e-01  
 
 
 [[5]]
 
 Call:
-lm(formula = y_beob ~ x_beob)
+lm(formula = scale(y_beob) ~ scale(x_beob))
 
 Coefficients:
-(Intercept)       x_beob  
-     1.8978       0.3353  </code></pre>
+  (Intercept)  scale(x_beob)  
+   -1.211e-16      3.303e-01  </code></pre>
 </div>
 </div>
 <div class="cell">

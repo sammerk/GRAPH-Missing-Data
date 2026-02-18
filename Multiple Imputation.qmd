@@ -15,6 +15,7 @@ webr:
     - miceadds
 toc: true    
 lang: de
+embed-resources: true
 ---
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
@@ -105,7 +106,7 @@ mice::xyplot(data_art_imp, y_beob ~ x_beob)
 ## Vergleich Regressionsanalytischer Ergebnisse
 ### Gepoolte Imputierte Regression
 ```{r}
-reg_fit <- with(data_art_imp, lm(y_beob ~ x_beob))
+reg_fit <- with(data_art_imp, lm(scale(y_beob) ~ scale(x_beob)))
 summary(reg_fit)
 reg_fit
 ```
