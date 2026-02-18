@@ -1,5 +1,135 @@
 [
   {
+    "objectID": "Multiple Imputation.html",
+    "href": "Multiple Imputation.html",
+    "title": "Multiple Imputation",
+    "section": "",
+    "text": "Die multiple Imputation (MI) ist eine sehr mächtige Methode zum Umgang mit fehlenden Werten, die auf der Idee basiert, mehrere plausible Werte für die fehlenden Daten zu generieren. Diese Methode wurde von Rubin (1976) entwickelt und hat sich seitdem als eine der Standardmethoden für den Umgang mit fehlenden Daten etabliert. MI besteht aus drei Hauptschritten (siehe Abbildung 1):\n\nImputation: In diesem Schritt werden mehrere vollständige Datensätze generiert, indem fehlende Werte durch plausible Werte ersetzt werden. Dies geschieht in der Regel durch die Verwendung von Modellen, die auf den beobachteten Daten basieren, um die fehlenden Werte zu schätzen. Es können verschiedene Imputationsmodelle verwendet werden, z.B. lineare Regression, logistische Regression, ordinale Regression, predictive mean matching oder Random Forests.\nAnalyse: Jeder der generierten vollständigen Datensätze wird einzeln analysiert, z.B. durch die Schätzung von Regressionsmodellen, Effektstärken, Hypothesentests.\nPooling: Die Ergebnisse der Analysen der einzelnen Datensätze werden anschließend zusammengeführt, um eine einzige Schätzung und Inferenzstatistik zu erhalten. Hierzu werden spezielle Pooling-Methoden verwendet, die die Unsicherheit berücksichtigen, die durch die Imputation der fehlenden Werte entsteht.\n\n\n\n\n\n\n\nAbbildung 1: Workflow des Missing Data Handling mit multipler Imputation\n\n\n\nIm Umfeld des {mice}-Packages in R ist zu diesem Workflow auch die folgende Terminologie gebräuchlich geworden:\n\nTerminologie im Umfeld von {mice} (siehe Buuren (2018))\n\n\n\n\n\n\n\n\nKlasse in {mice}\nHäufiges Objekt Suffix\n{mice}-Funktion\nBeschreibung\n\n\n\n\nmids\nimp\nmice()\nMultipel imputierter Datensatz\n\n\nmild\nidl\ncomplete()\nListe multipel imputierter Daten\n\n\nmira\nfit\nwith()\nWiederholte Analysen mit multipler Imputation\n\n\nmipo\nest\npool()\nPooling der Ergebnisse aus multipler Imputation",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#datengrundlage",
+    "href": "Multiple Imputation.html#datengrundlage",
+    "title": "Multiple Imputation",
+    "section": "3.1 Datengrundlage",
+    "text": "3.1 Datengrundlage\n\nlibrary(tidyverse)\n\nN &lt;- 1000\n\ndata_art &lt;-\n  tibble(\n    x_comp = rnorm(N),\n    y_comp = 2 + 0.5 * x_comp + rnorm(N),\n    r_y = rbinom(N, 1, prob = plogis(.2 + 3 * x_comp)),\n    r_x = rbinom(N, 1, prob = plogis(4 - 3 * y_comp)),\n    y_beob = ifelse(r_y == 0, y_comp, NA),\n    x_beob = x_comp\n  )",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#missingness-pattern",
+    "href": "Multiple Imputation.html#missingness-pattern",
+    "title": "Multiple Imputation",
+    "section": "3.2 Missingness Pattern",
+    "text": "3.2 Missingness Pattern\n\nlibrary(naniar)\nvis_miss(data_art, sort_miss = TRUE, cluster = TRUE) +\n  theme(plot.margin = margin(t = 20, r = 10, b = 10, l = 10))",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#missingness-mechanism",
+    "href": "Multiple Imputation.html#missingness-mechanism",
+    "title": "Multiple Imputation",
+    "section": "3.3 Missingness Mechanism",
+    "text": "3.3 Missingness Mechanism\n\nggplot(data_art, aes(x = x_beob, y = y_beob)) +\n  geom_miss_point(jitter = 0.1) +\n  theme_minimal()",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#imputation",
+    "href": "Multiple Imputation.html#imputation",
+    "title": "Multiple Imputation",
+    "section": "3.4 Imputation",
+    "text": "3.4 Imputation\n\nlibrary(mice)   \n\n\nAttaching package: 'mice'\n\n\nThe following object is masked from 'package:stats':\n\n    filter\n\n\nThe following objects are masked from 'package:base':\n\n    cbind, rbind\n\ndata_art_imp &lt;- mice(\n  data_art %&gt;% select(x_beob, y_beob), \n  m = 5, \n  seed = 1895\n)\n\n\n iter imp variable\n  1   1  y_beob\n  1   2  y_beob\n  1   3  y_beob\n  1   4  y_beob\n  1   5  y_beob\n  2   1  y_beob\n  2   2  y_beob\n  2   3  y_beob\n  2   4  y_beob\n  2   5  y_beob\n  3   1  y_beob\n  3   2  y_beob\n  3   3  y_beob\n  3   4  y_beob\n  3   5  y_beob\n  4   1  y_beob\n  4   2  y_beob\n  4   3  y_beob\n  4   4  y_beob\n  4   5  y_beob\n  5   1  y_beob\n  5   2  y_beob\n  5   3  y_beob\n  5   4  y_beob\n  5   5  y_beob\n\nsummary(data_art_imp)\n\nClass: mids\nNumber of multiple imputations:  5 \nImputation methods:\nx_beob y_beob \n    \"\"  \"pmm\" \nPredictorMatrix:\n       x_beob y_beob\nx_beob      0      1\ny_beob      1      0",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#visual-check-des-imputationsalgorithmus",
+    "href": "Multiple Imputation.html#visual-check-des-imputationsalgorithmus",
+    "title": "Multiple Imputation",
+    "section": "3.5 Visual Check des Imputationsalgorithmus",
+    "text": "3.5 Visual Check des Imputationsalgorithmus\n\nplot(data_art_imp)",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#visual-check-der-imputation",
+    "href": "Multiple Imputation.html#visual-check-der-imputation",
+    "title": "Multiple Imputation",
+    "section": "3.6 Visual Check der Imputation",
+    "text": "3.6 Visual Check der Imputation\n\nlibrary(ggmice)\n\n\nAttaching package: 'ggmice'\n\n\nThe following objects are masked from 'package:mice':\n\n    bwplot, densityplot, stripplot, xyplot\n\nplot_flux(data_art %&gt;% select(x_beob, y_beob))\n\n\n\n\n\n\n\nmice::xyplot(data_art_imp, y_beob ~ x_beob)",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#vergleich-regressionsanalytischer-ergebnisse",
+    "href": "Multiple Imputation.html#vergleich-regressionsanalytischer-ergebnisse",
+    "title": "Multiple Imputation",
+    "section": "3.7 Vergleich Regressionsanalytischer Ergebnisse",
+    "text": "3.7 Vergleich Regressionsanalytischer Ergebnisse\n\n3.7.1 Gepoolte Imputierte Regression\n\nreg_fit &lt;- with(data_art_imp, lm(y_beob ~ x_beob))\nsummary(reg_fit)\n\n# A tibble: 10 × 7\n   term        estimate std.error statistic  p.value  nobs df.residual\n   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;       &lt;dbl&gt;\n 1 (Intercept)    1.93     0.0310      62.3 0         1000         998\n 2 x_beob         0.350    0.0312      11.2 1.56e-27  1000         998\n 3 (Intercept)    1.95     0.0300      64.9 0         1000         998\n 4 x_beob         0.366    0.0302      12.1 1.47e-31  1000         998\n 5 (Intercept)    1.89     0.0305      62.0 0         1000         998\n 6 x_beob         0.377    0.0308      12.3 2.93e-32  1000         998\n 7 (Intercept)    1.87     0.0302      61.9 0         1000         998\n 8 x_beob         0.359    0.0304      11.8 3.49e-30  1000         998\n 9 (Intercept)    1.90     0.0301      63.0 0         1000         998\n10 x_beob         0.335    0.0303      11.1 7.09e-27  1000         998\n\nreg_fit\n\ncall :\nwith.mids(data = data_art_imp, expr = lm(y_beob ~ x_beob))\n\ncall1 :\nmice(data = data_art %&gt;% select(x_beob, y_beob), m = 5, seed = 1895)\n\nnmis :\n[1]   0 515\n\nanalyses :\n[[1]]\n\nCall:\nlm(formula = y_beob ~ x_beob)\n\nCoefficients:\n(Intercept)       x_beob  \n     1.9309       0.3497  \n\n\n[[2]]\n\nCall:\nlm(formula = y_beob ~ x_beob)\n\nCoefficients:\n(Intercept)       x_beob  \n     1.9465       0.3657  \n\n\n[[3]]\n\nCall:\nlm(formula = y_beob ~ x_beob)\n\nCoefficients:\n(Intercept)       x_beob  \n     1.8930       0.3769  \n\n\n[[4]]\n\nCall:\nlm(formula = y_beob ~ x_beob)\n\nCoefficients:\n(Intercept)       x_beob  \n     1.8688       0.3589  \n\n\n[[5]]\n\nCall:\nlm(formula = y_beob ~ x_beob)\n\nCoefficients:\n(Intercept)       x_beob  \n     1.8978       0.3353  \n\n\n\nreg_est &lt;- pool(reg_fit)\nsummary(reg_est)\n\n         term  estimate  std.error statistic       df      p.value\n1 (Intercept) 1.9073890 0.04565323  41.77994 12.48776 8.532507e-15\n2      x_beob 0.3572987 0.03514383  10.16675 62.39158 7.304749e-15\n\nreg_est\n\nClass: mipo    m = 5 \n         term m  estimate         ubar            b           t dfcom       df\n1 (Intercept) 5 1.9073890 0.0009214742 0.0009689525 0.002084217   998 12.48776\n2      x_beob 5 0.3572987 0.0009355717 0.0002495977 0.001235089   998 62.39158\n        riv    lambda       fmi\n1 1.2618291 0.5578800 0.6149728\n2 0.3201436 0.2425066 0.2656745\n\n\n\n\n3.7.2 Listwise Deletion und vollständige Daten\n\nreg_listwise &lt;- lm(y_beob ~ x_beob, data = data_art)\nreg_comp &lt;- lm(y_comp ~ x_comp, data = data_art)\nsjPlot::tab_model(reg_listwise, reg_comp, show.std = T, show.ci = F)\n\n\n\n\n \ny beob\ny comp\n\n\nPredictors\nEstimates\nstd. Beta\np\nEstimates\nstd. Beta\np\n\n\n(Intercept)\n1.95\n0.00\n&lt;0.001\n1.99\n0.00\n&lt;0.001\n\n\nx beob\n0.48\n0.34\n&lt;0.001\n\n\n\n\n\nx comp\n\n\n\n0.50\n0.45\n&lt;0.001\n\n\nObservations\n485\n1000\n\n\nR2 / R2 adjusted\n0.113 / 0.111\n0.206 / 0.205",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#datengrundlage-1",
+    "href": "Multiple Imputation.html#datengrundlage-1",
+    "title": "Multiple Imputation",
+    "section": "4.1 Datengrundlage",
+    "text": "4.1 Datengrundlage\nAls Datengrundlage verwenden wir einen Ausschnitt des STAR-Experiments, indem die experimentell die Wirkung einer Klassengrößenreduktion auf die Schulleistung untersucht wurde (Word, 1990). Um zunächst das Problem genesteter Daten zu umgehen, verwenden wir nur die Daten je einer Schüler:in pro Klasse. Die Daten enthalten die folgenden Variablen:\n\nlibrary(haven)\nlibrary(dplyr)\nlibrary(codebook)\n\nset.seed(1895)\ndata_star &lt;- read_sav(\n  \"https://raw.githubusercontent.com/sammerk/GRAPH-Missing-Data/master/data_missing_workshop.sav\"\n) %&gt;% \n    group_by(g3tchid) %&gt;%\n    sample_n(1) %&gt;%\n    ungroup()\n\nlabel_browser_static(data_star)\n\n\n\n\n\n\nForschungsfragen: Wie wirkt sich die Klassengröße auf die Lese-, Mathematikleistung und Partizipation aus? Gibt differentielle Effekte nach SES?",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#missingness-patters",
+    "href": "Multiple Imputation.html#missingness-patters",
+    "title": "Multiple Imputation",
+    "section": "4.2 Missingness Patters",
+    "text": "4.2 Missingness Patters\n\nlibrary(naniar)\nvis_miss(data_star, sort_miss = TRUE, cluster = TRUE)",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#co-variation-und-verteilung-der-daten",
+    "href": "Multiple Imputation.html#co-variation-und-verteilung-der-daten",
+    "title": "Multiple Imputation",
+    "section": "4.3 (Co-)Variation und Verteilung der Daten",
+    "text": "4.3 (Co-)Variation und Verteilung der Daten\n\nlibrary(GGally)\nggpairs(\n  data_star %&gt;% \n    select(starts_with(\"g4\"), -g4tchid, g3freelunch, g3classsize) %&gt;% \n    mutate(across(c(starts_with(\"g4pt\"), g3freelunch), as.factor))\n)",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#missing-mechanisms",
+    "href": "Multiple Imputation.html#missing-mechanisms",
+    "title": "Multiple Imputation",
+    "section": "4.4 Missing Mechanisms",
+    "text": "4.4 Missing Mechanisms\n\nlibrary(ggplot2)\nlibrary(ggmice)\nggplot(data_star, aes(x = g3tmathss, y = g4ptimpt)) +\n  geom_miss_point(jitter = 0.1) +\n  theme_minimal()\n\nggplot(data_star, aes(x = g3tmathss, y = g3freelunch)) +\n  geom_miss_point(jitter = 0.1) +\n  theme_minimal()\n\nmcar_test(data_star)",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
+    "objectID": "Multiple Imputation.html#imputation-1",
+    "href": "Multiple Imputation.html#imputation-1",
+    "title": "Multiple Imputation",
+    "section": "4.5 Imputation",
+    "text": "4.5 Imputation\n\nlibrary(mice)   \ndata_star_unlabeled &lt;- data_star %&gt;% \n    sjlabelled::remove_all_labels()\n\ndata_star_imp &lt;- mice(\n  data_star_unlabeled %&gt;% select(-g3tchid, -classID), \n  m = 5, \n  seed = 1895\n)\nsummary(data_star_imp)\nplot_flux(data_star_unlabeled)",
+    "crumbs": [
+      "Multiple Imputation"
+    ]
+  },
+  {
     "objectID": "Multiple lineare Regression.html",
     "href": "Multiple lineare Regression.html",
     "title": "Wdh: Multiple lineare Regression",
@@ -60,65 +190,58 @@
     ]
   },
   {
-    "objectID": "Nonsolutions.html",
-    "href": "Nonsolutions.html",
-    "title": "Nonsolutions",
+    "objectID": "exams/BESD-Scatterplot-zuordnen.html",
+    "href": "exams/BESD-Scatterplot-zuordnen.html",
+    "title": "1 Question",
     "section": "",
-    "text": "1 Überblick\nIn den allermeistens Fällen sind\n\nCase und List Wise Deletion,\nMean Imputation und\nRegression Imputation\n\nproblematische Methoden zum Umgang mit fehlenden Werten, die zu verzerrten Ergebnissen führen können.\n\n\n\n\n\n\nNone Übung: Nonsolutions\n\n\n\n\nWarum kann die Verwendung von Case und List Wise Deletion selbst unter MCAR problematisch sein?\nWelche Probleme könnten bei der Verwendung von Mean oder Regression Imputation auftreten?",
+    "text": "── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\n1 Question\n\nÜbung \nWelche der folgenden Abbildungen passt am besten zu dem Bimonial Effect Size Display?\n\n\n\n\n\nGruppe\nErfolg\nMisserfolg\n\n\n\n\nTreatment\n0.8\n0.2\n\n\nKontrolle\n0.2\n0.8\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n2 Solution\n\n\n3 Meta-information\nexname: BESD-Scatterplot-zuordnen extype: schoice exsolution: 01"
+  },
+  {
+    "objectID": "exams/g3classsize_g3tmathss_graph_sc.html",
+    "href": "exams/g3classsize_g3tmathss_graph_sc.html",
+    "title": "1 Question",
+    "section": "",
+    "text": "1 Question\n\nÜbung \nWelche Aussagen treffen auf obige Abbildung zu?\n\n\n\n2 Solution\n\n\n3 Meta-information\nexname: g3classsize_g3tmathss_graph_sc extype: mchoice exsolution: 110111"
+  },
+  {
+    "objectID": "exams/einfache-reg-rechteck.html",
+    "href": "exams/einfache-reg-rechteck.html",
+    "title": "1 Question",
+    "section": "",
+    "text": "── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\n1 Question\n\nÜbung \nErzeugen Sie in der interaktiven Visualisierung genau vier Punkte und zwar (-3;0), (-3;4), (0;0), (0;4).\n\nDas Intercept \\(b_0\\) der dadurch entstehenden Regressionsgerade beträgt dann ##ANSWER1##.\nWarum zeigt diesen Beispiel, dass das ebenfalls naheliegende Optimierungkriterium der Summe der kleinsten Residualbeträge \\(\\sum_{i=1}^{N} \\left| \\varepsilon_i \\right|\\) problematisch wäre?\n\n\n\n\n2 Solution\nEs lässt sich beweisen, dass die Regressionsgerade - bestimmt durch die Summe der kleinsten Quadrate - immer den »Schwerpunkt« der Punktewolke \\(\\left(\\bar{x}; \\bar{y}\\right)\\) enthält. Da die Punkte ein Rechteck mit Kanten parallel zu den Koordinatenachsen darstellen, ist \\(b_1 = 0\\) und daher \\(b_0 = \\bar{y}\\).\nWäre das Optimierungskriterium für \\(b_0\\) und \\(b_1\\) die Summe der Residuenbeträge \\(\\sum_{i=1}^{N} \\left| \\varepsilon_i \\right|\\) wäre jede Regressionsgerade mit \\(b_1 = 0\\) und \\(min(x_i) &lt; b_0 &lt; max(x_i)\\) »gleich optimal« - die Regressionsgerade wäre also nicht eindeutig bestimmt.\n\n\n3 Meta-information\nexname: einfache reg rechteck extype: cloze exclozetype: num exsolution: 2 extol: 0.01"
+  },
+  {
+    "objectID": "exams/Deskriptive_Explorative_Explanative_Studien_r.html",
+    "href": "exams/Deskriptive_Explorative_Explanative_Studien_r.html",
+    "title": "1 Question",
+    "section": "",
+    "text": "1 Question\n\nÜbung \nEin Forscherteam untersucht die Anzahl von Schüler*innen mit Deutsch als Zweitsprache in den verschiedenen Stadtteilen von Karlsruhe. Wird dabei eine deskriptive, explanative oder explorative Studie durchgeführt?\n\n\n\n2 Meta-information\nexname: Erkentnisinteresse in Forschungsfrage erkennen extype: schoice exsolution: 100"
+  },
+  {
+    "objectID": "exams/regressionsebene-interpretieren.html",
+    "href": "exams/regressionsebene-interpretieren.html",
+    "title": "1 Question",
+    "section": "",
+    "text": "1 Question\n\nÜbung \nBetrachten Sie die interaktive 3D-Visualisierung der multiplen Regression aus dem Abschnitt “Geometrische Repräsentation der multiplen Regression”.\nWelche der folgenden Aussagen ist korrekt?\n\n\n\n2 Solution\n\n\n3 Meta-information\nexname: 3d regressionsebene interpretieren extype: mchoice exsolution: 110101 exshuffle: TRUE ```"
+  },
+  {
+    "objectID": "Bayesian Imputation During Model Fitting.html",
+    "href": "Bayesian Imputation During Model Fitting.html",
+    "title": "Bayesian Imutation during Model Fitting",
+    "section": "",
+    "text": "Das zentrale Problem einer Mean oder Single Imputation ist, dass bei anschließender Modellschätzung die imputierten Daten nicht von den beobachteten Daten unterschieden werden können. Dadurch können Parameter und deren Unsicherheit nicht korrekt geschätzt werden. Bayesian Imputation during Model Fitting (BIMF) ist eine Methode, die dieses Problem adressiert, indem sie die fehlenden Werte als zusätzliche Parameter in das Modell integriert für diese Priors anniment und anhand der Daten Posteriors schätzt. Im Posterior kann die Unsicherheit der fehlenden Werte formalisiert und deren Einfluss auf die Modellparameter bei anschließender Schätzung berücksichtigt werden.\n\n\n\n\n\n\n\n\nWarnungAchtung: stan-Installation notwendig\n\n\n\nIn den folgenden Beispielen wird das R-Paket {brms} verwendet. Dieses Paket basiert auf der probabilistischen Programmiersprache stan, die für die Durchführung von Bayesianischen Analysen notwendig ist. Die Installation von stan kann je nach Betriebssystem und R-Version komplex sein. Es wird empfohlen, diese Installationsanleitung zu befolgen.\n\n\nIn {brms} kann BIMF mit der mi()-Funktion implementiert werden, die es ermöglicht, fehlende Werte als zusätzliche Parameter in das Modell zu integrieren. Hier ist ein einfaches Beispiel, wie dies umgesetzt werden kann:\n\nlibrary(brms)\n\nLoading required package: Rcpp\n\n\nLoading 'brms' package (version 2.23.0). Useful instructions\ncan be found by typing help('brms'). A more detailed introduction\nto the package is available through vignette('brms_overview').\n\n\n\nAttaching package: 'brms'\n\n\nThe following object is masked from 'package:stats':\n\n    ar\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.0     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n\n\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(naniar)\nset.seed(1895)\nN &lt;- 400\n\ndata_mar &lt;-\n  tibble(\n    x = rnorm(N),\n    # 0.5 ist die Stärke des Zusammenhangs zwischen x und y_comp\n    y_comp = 2 + 0.1 * x + rnorm(N),\n    # Die Wahrscheinlichkeit, dass y_beob fehlt, hängt von x ab\n    r = rbinom(N, 1, prob = plogis(1 * x)),\n    y_beob = ifelse(r == 0, y_comp, NA),\n    y_mis = ifelse(r == 1, y_comp, NA)\n  )\n\n# Plot der randverteilungen von beobachteten und fehlenden Werten\nggplot(data_mar, aes(x = x, y = y_beob)) +\n  geom_miss_point() +\n  # Regression der beobachteten Werte\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#267326\") +\n  # Regression aller Werte (inkl. fehlende Werte, die hier als NA dargestellt werden)\n  geom_smooth(\n    aes(y = y_comp),\n    method = \"lm\",\n    se = FALSE,\n    color = \"#267326\",\n    linetype = \"dashed\"\n  ) +\n  # mean(y_comp)\n  geom_hline(\n    yintercept = mean(data_mar$y_comp, na.rm = TRUE),\n    linetype = \"dashed\",\n    color = \"#267326\"\n  ) +\n  # mean(y_beob)\n  geom_hline(\n    yintercept = mean(data_mar$y_beob, na.rm = TRUE),\n    color = \"#267326\"\n  ) +\n  labs(caption = \"Gestrichelte Linie entspricht der »wahren Regression«\") +\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: Removed 196 rows containing non-finite outside the scale range\n(`stat_smooth()`).\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\nbrm(y_comp ~ x, data = data_mar, silent = 2, refresh = 0)\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_comp ~ x \n   Data: data_mar (Number of observations: 400) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.11      0.05     2.02     2.21 1.00     4468     2860\nx             0.19      0.05     0.09     0.29 1.00     3817     2713\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.97      0.04     0.91     1.04 1.00     3767     2752\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nbrm(y_beob ~ x, data = data_mar, silent = 2, refresh = 0)\n\nWarning: Rows containing NAs were excluded from the model.\n\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_beob ~ x \n   Data: data_mar (Number of observations: 204) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.15      0.08     2.00     2.29 1.00     3867     2841\nx             0.18      0.07     0.04     0.32 1.00     4067     2683\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.96      0.05     0.87     1.06 1.00     3732     2985\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nbrm(bf(y_beob | mi() ~ x), data = data_mar, silent = 2, refresh = 0)\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_beob | mi() ~ x \n   Data: data_mar (Number of observations: 400) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.15      0.07     2.00     2.29 1.00     2929     3109\nx             0.18      0.07     0.03     0.33 1.00     2893     3003\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.96      0.05     0.87     1.06 1.00     1974     2386\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).",
     "crumbs": [
-      "Nonsolutions"
+      "Bayesian Imutation during Model Fitting"
     ]
   },
   {
-    "objectID": "exams/methodische-strenge-vergleichen.html",
-    "href": "exams/methodische-strenge-vergleichen.html",
-    "title": "1 Question",
+    "objectID": "Bayesian Imputation During Model Fitting.html#umsetzung-in-brms",
+    "href": "Bayesian Imputation During Model Fitting.html#umsetzung-in-brms",
+    "title": "Bayesian Imutation during Model Fitting",
     "section": "",
-    "text": "── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\n1 Question\n\nÜbung \nForschergruppe A hat an einer Stichprobe von 20 Grundschulen in Baden-Württemberg über drei Monate hinweg eine wöchentliche “bewegte Pause” für Lehrkräfte angeboten. Die Maßnahme wurde am Ende des Zeitraumes evaluiert und es zeigte sich, dass teilnehmende Lehrkräfte signifikant höhere Werte beim subjektiven Wohlbefinden in einem Fragebogen angaben, als zu Beginn der Maßnahme und auch im Vergleich zu einer Kontrollgruppe von Grundschullehrkräften, die ein solches Angebot nicht erhalten hatten. Die Forschenden leiten daraus eine Empfehlung zur Fortführung der Maßnahme ab.\nForschergruppe B hat an einer Stichprobe von 20 Grundschulen in ganz Deutschland über drei Monate hinweg eine wöchentliche “bewegte Pause” für Lehrkräfte angeboten. Die Maßnahme wurde am Ende des Zeitraumes evaluiert und es zeigte sich, dass teilnehmende Lehrkräfte signifikant höhere Werte beim subjektiven Wohlbefinden in einem Fragebogen angaben, als zu Beginn der Maßnahme und auch im Vergleich zu einer Kontrollgruppe von Grundschullehrkräften, die ein solches Angebot nicht erhalten hatten. Die Forschenden leiten daraus eine Empfehlung zur Fortführung der Maßnahme ab.\n\nWorin unterscheiden sich die beiden Studien?\n\n\n\n\n2 Solution\n\n\n3 Meta-information\nexname: Unterschied_wiss_Guetekrit_erkennen_2 extype: mchoice exsolution: 1000 exshuffle: true"
-  },
-  {
-    "objectID": "exams/Laengsschnitttliche_Studie_erkennen.html",
-    "href": "exams/Laengsschnitttliche_Studie_erkennen.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "Kreuzen Sie im Folgenden die Szenarien an, bei denen es sich um eine »echte« Längsschnittstudie handelt.\n\n\n\n\nEine Forschergruppe erhebt bei denselben 120 Lehrkräften an 15 Gemeinschaftsschulen im Jahr 2022 und erneut im Jahr 2025 deren lehr- lerntheoretische Überzeugungen, Selbstwirksamkeit und Nutzung digitaler Medien mittels identischem Fragebogen.\nIn einer Schule werden dieselben drei Klassen von Klasse 5 bis Klasse 8 jährlich mit dem ELFE II getestet, um die Entwicklung der Lesekompetenz der Schülerinnen und Schüler zu untersuchen.\nIm Rahmen eines Schulentwicklungsprogramms werden dieselben Schulleitungen vor der Einführung, ein Jahr nach der Einführung und drei Jahre nach der Einführung zu ihrem Führungsverständnis und zu Kooperationsstrukturen im Kollegium befragt.\nEine Studie begleitet dieselben Referendarinnen und Referendare vom Vorbereitungsdienst bis drei Jahre nach dem Berufseinstieg und erhebt wiederholt ihre Unterrichtsqualität mittels standardisierter Beobachtungsinstrumente.\nIn den Jahren 2018, 2020 und 2022 werden jeweils unterschiedliche Stichproben von Lehrkräften aus derselben Region zu ihrer Arbeitszufriedenheit befragt.\nEine Studie vergleicht die Lesekompetenz von Viertklässlern im Jahr 2015 mit der Lesekompetenz von Viertklässlern im Jahr 2023, um Veränderungen im Bildungssystem zu analysieren.\nAn einer Schule werden im Jahr 2024 alle Klassen einer Jahrgangsstufe befragt, wobei die Lehrkräfte gebeten werden, rückblickend einzuschätzen, wie sich ihr Unterricht in den letzten fünf Jahren verändert hat.\nEine Evaluation untersucht die Wirkung einer neuen Unterrichtsmethode, indem eine Jahrgangsstufe vor der Einführung und eine andere Jahrgangsstufe nach der Einführung getestet wird."
-  },
-  {
-    "objectID": "exams/Laengsschnitttliche_Studie_erkennen.html#answerlist",
-    "href": "exams/Laengsschnitttliche_Studie_erkennen.html#answerlist",
-    "title": "1 Question",
-    "section": "",
-    "text": "Eine Forschergruppe erhebt bei denselben 120 Lehrkräften an 15 Gemeinschaftsschulen im Jahr 2022 und erneut im Jahr 2025 deren lehr- lerntheoretische Überzeugungen, Selbstwirksamkeit und Nutzung digitaler Medien mittels identischem Fragebogen.\nIn einer Schule werden dieselben drei Klassen von Klasse 5 bis Klasse 8 jährlich mit dem ELFE II getestet, um die Entwicklung der Lesekompetenz der Schülerinnen und Schüler zu untersuchen.\nIm Rahmen eines Schulentwicklungsprogramms werden dieselben Schulleitungen vor der Einführung, ein Jahr nach der Einführung und drei Jahre nach der Einführung zu ihrem Führungsverständnis und zu Kooperationsstrukturen im Kollegium befragt.\nEine Studie begleitet dieselben Referendarinnen und Referendare vom Vorbereitungsdienst bis drei Jahre nach dem Berufseinstieg und erhebt wiederholt ihre Unterrichtsqualität mittels standardisierter Beobachtungsinstrumente.\nIn den Jahren 2018, 2020 und 2022 werden jeweils unterschiedliche Stichproben von Lehrkräften aus derselben Region zu ihrer Arbeitszufriedenheit befragt.\nEine Studie vergleicht die Lesekompetenz von Viertklässlern im Jahr 2015 mit der Lesekompetenz von Viertklässlern im Jahr 2023, um Veränderungen im Bildungssystem zu analysieren.\nAn einer Schule werden im Jahr 2024 alle Klassen einer Jahrgangsstufe befragt, wobei die Lehrkräfte gebeten werden, rückblickend einzuschätzen, wie sich ihr Unterricht in den letzten fünf Jahren verändert hat.\nEine Evaluation untersucht die Wirkung einer neuen Unterrichtsmethode, indem eine Jahrgangsstufe vor der Einführung und eine andere Jahrgangsstufe nach der Einführung getestet wird."
-  },
-  {
-    "objectID": "exams/Scatterplot-BESD-zuordnen.html",
-    "href": "exams/Scatterplot-BESD-zuordnen.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nAttaching package: 'kableExtra'\n\n\nThe following object is masked from 'package:dplyr':\n\n    group_rows\n\n\n\n1 Question\n\nÜbung \nIm folgenden ist die einfache lineare Regression von N = 286 Datenpunkten der Variable Sozioökonomischer Status (SES) auf die Variable Matheleistung (ML) dargestellt.\n\n\n\n\n\n\n\n\n\nGeben Sie in folgender Tabelle die vier Felder des Binomial Effect Size Display als Werte jeweils zwischen 0 und 1 an.\n\n\n\n\nunterdurchschn. SES\nüberdurchschn. SES\n\n\n\n\nüberdurchschn. ML\n##ANSWER1##\n##ANSWER2##\n\n\nunterdurchschn. ML\n##ANSWER3##\n##ANSWER4##\n\n\n\n\n\n\n2 Solution\n\n2.0.1 Lösung:\nDie auf zwei Nachkommastellen gerundeten wahren Zahlen sind:\n\n\n\n\n\n\nunterdurchschn. SES\nüberdurchschn. SES\n\n\n\n\nüberdurchschn. ML\n0.96\n0.04\n\n\nunterdurchschn. ML\n0.04\n0.96\n\n\n\n\n\n\nALs »korrekt« wird alles gekennezichent, was ±20% genau ist.\n\n\n\n\n3 Meta-information\nexname: Scatterplot-BESD-zuordnen extype: cloze exclozetype: num|num|num|num exsolution: 0.96|0.04|0.04|0.96 extol: 0.2|0.2|0.2|0.2"
-  },
-  {
-    "objectID": "exams/Deskriptive_Explorative_Explanative_Praediktive_Studien_Laengsschnitt.html",
-    "href": "exams/Deskriptive_Explorative_Explanative_Praediktive_Studien_Laengsschnitt.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "1 Question\n\nÜbung \nWird in der folgenden Kurzbeschreibung eine deskriptive, explanative, explorative oder prädiktive Studie durchgeführt?\n\nFrühere Leistungsdaten, Motivation und Fehlzeiten werden genutzt, um vorherzusagen, welche Schülerinnen und Schüler im weiteren Verlauf ein erhöhtes Risiko für Leistungsabbrüche zeigen.\n\n\n\n\n2 Meta-information\nexname: Erkentnisinteresse in Forschungsfrage erkennen extype: schoice exsolution: 0001"
-  },
-  {
-    "objectID": "exams/Grundbegriffe-Regression-erkennen.html",
-    "href": "exams/Grundbegriffe-Regression-erkennen.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "1 Question\n\nÜbung \nWelche der Begriffe passen zum grün hervorgehobenen Teil der folgenden Abbildung?\n\n\n\n\n2 Meta-information\nexname: Grundbegriffe Regression erkennen extype: mchoice exsolution: 00000000000000000001111 exshuffle: 5"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Herzlich Willkommen 👋🏼",
-    "section": "",
-    "text": "Auf dieser Seite finden Sie eine Sammlung von Ressourcen, Tutorials und Anleitungen zu unserem Workshop »Umgang mit fehlenden Werten«. Das Workshopthema wird oft zu den fortgeschritteneren Verfahren gezählt. Damit wir innerhalb des Workshop ein (mindestens) konzeptuelles Verständnis erzielen können ist es empfehlenswert vorab die Grundlagen der Regressionsmodellierung aufzufrischen. Dazu sollen die ersten bein Kapitel dieses E-Books dienen.\n\n\n\n\n\n\nHinweisZweck dieses E-Books \n\n\n\n\n\nDieses E-Book soll aber kein vollständiges Lehrbuch sein. Vielmehr eine Sammlung von Erklärungen, Aufgaben, Code, Links, Datensätzen und Literaturverweisen.",
+    "text": "WarnungAchtung: stan-Installation notwendig\n\n\n\nIn den folgenden Beispielen wird das R-Paket {brms} verwendet. Dieses Paket basiert auf der probabilistischen Programmiersprache stan, die für die Durchführung von Bayesianischen Analysen notwendig ist. Die Installation von stan kann je nach Betriebssystem und R-Version komplex sein. Es wird empfohlen, diese Installationsanleitung zu befolgen.\n\n\nIn {brms} kann BIMF mit der mi()-Funktion implementiert werden, die es ermöglicht, fehlende Werte als zusätzliche Parameter in das Modell zu integrieren. Hier ist ein einfaches Beispiel, wie dies umgesetzt werden kann:\n\nlibrary(brms)\n\nLoading required package: Rcpp\n\n\nLoading 'brms' package (version 2.23.0). Useful instructions\ncan be found by typing help('brms'). A more detailed introduction\nto the package is available through vignette('brms_overview').\n\n\n\nAttaching package: 'brms'\n\n\nThe following object is masked from 'package:stats':\n\n    ar\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.0     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n\n\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(naniar)\nset.seed(1895)\nN &lt;- 400\n\ndata_mar &lt;-\n  tibble(\n    x = rnorm(N),\n    # 0.5 ist die Stärke des Zusammenhangs zwischen x und y_comp\n    y_comp = 2 + 0.1 * x + rnorm(N),\n    # Die Wahrscheinlichkeit, dass y_beob fehlt, hängt von x ab\n    r = rbinom(N, 1, prob = plogis(1 * x)),\n    y_beob = ifelse(r == 0, y_comp, NA),\n    y_mis = ifelse(r == 1, y_comp, NA)\n  )\n\n# Plot der randverteilungen von beobachteten und fehlenden Werten\nggplot(data_mar, aes(x = x, y = y_beob)) +\n  geom_miss_point() +\n  # Regression der beobachteten Werte\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#267326\") +\n  # Regression aller Werte (inkl. fehlende Werte, die hier als NA dargestellt werden)\n  geom_smooth(\n    aes(y = y_comp),\n    method = \"lm\",\n    se = FALSE,\n    color = \"#267326\",\n    linetype = \"dashed\"\n  ) +\n  # mean(y_comp)\n  geom_hline(\n    yintercept = mean(data_mar$y_comp, na.rm = TRUE),\n    linetype = \"dashed\",\n    color = \"#267326\"\n  ) +\n  # mean(y_beob)\n  geom_hline(\n    yintercept = mean(data_mar$y_beob, na.rm = TRUE),\n    color = \"#267326\"\n  ) +\n  labs(caption = \"Gestrichelte Linie entspricht der »wahren Regression«\") +\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: Removed 196 rows containing non-finite outside the scale range\n(`stat_smooth()`).\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\nbrm(y_comp ~ x, data = data_mar, silent = 2, refresh = 0)\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_comp ~ x \n   Data: data_mar (Number of observations: 400) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.11      0.05     2.02     2.21 1.00     4468     2860\nx             0.19      0.05     0.09     0.29 1.00     3817     2713\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.97      0.04     0.91     1.04 1.00     3767     2752\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nbrm(y_beob ~ x, data = data_mar, silent = 2, refresh = 0)\n\nWarning: Rows containing NAs were excluded from the model.\n\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_beob ~ x \n   Data: data_mar (Number of observations: 204) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.15      0.08     2.00     2.29 1.00     3867     2841\nx             0.18      0.07     0.04     0.32 1.00     4067     2683\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.96      0.05     0.87     1.06 1.00     3732     2985\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nbrm(bf(y_beob | mi() ~ x), data = data_mar, silent = 2, refresh = 0)\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_beob | mi() ~ x \n   Data: data_mar (Number of observations: 400) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.15      0.07     2.00     2.29 1.00     2929     3109\nx             0.18      0.07     0.03     0.33 1.00     2893     3003\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.96      0.05     0.87     1.06 1.00     1974     2386\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).",
     "crumbs": [
-      "Herzlich Willkommen 👋🏼"
+      "Bayesian Imutation during Model Fitting"
     ]
   },
   {
@@ -299,78 +422,55 @@
     ]
   },
   {
-    "objectID": "Bayesian Imputation During Model Fitting.html",
-    "href": "Bayesian Imputation During Model Fitting.html",
-    "title": "Bayesian Imutation during Model Fitting",
+    "objectID": "exams/Grundbegriffe-Regression-erkennen.html",
+    "href": "exams/Grundbegriffe-Regression-erkennen.html",
+    "title": "1 Question",
     "section": "",
-    "text": "Das zentrale Problem einer Mean oder Single Imputation ist, dass bei anschließender Modellschätzung die imputierten Daten nicht von den beobachteten Daten unterschieden werden können. Dadurch können Parameter und deren Unsicherheit nicht korrekt geschätzt werden. Bayesian Imputation during Model Fitting (BIMF) ist eine Methode, die dieses Problem adressiert, indem sie die fehlenden Werte als zusätzliche Parameter in das Modell integriert für diese Priors anniment und anhand der Daten Posteriors schätzt. Im Posterior kann die Unsicherheit der fehlenden Werte formalisiert und deren Einfluss auf die Modellparameter bei anschließender Schätzung berücksichtigt werden.\n\n\n\n\n\n\n\n\nWarnungAchtung: stan-Installation notwendig\n\n\n\nIn den folgenden Beispielen wird das R-Paket {brms} verwendet. Dieses Paket basiert auf der probabilistischen Programmiersprache stan, die für die Durchführung von Bayesianischen Analysen notwendig ist. Die Installation von stan kann je nach Betriebssystem und R-Version komplex sein. Es wird empfohlen, diese Installationsanleitung zu befolgen.\n\n\nIn {brms} kann BIMF mit der mi()-Funktion implementiert werden, die es ermöglicht, fehlende Werte als zusätzliche Parameter in das Modell zu integrieren. Hier ist ein einfaches Beispiel, wie dies umgesetzt werden kann:\n\nlibrary(brms)\n\nLoading required package: Rcpp\n\n\nLoading 'brms' package (version 2.23.0). Useful instructions\ncan be found by typing help('brms'). A more detailed introduction\nto the package is available through vignette('brms_overview').\n\n\n\nAttaching package: 'brms'\n\n\nThe following object is masked from 'package:stats':\n\n    ar\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.0     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n\n\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(naniar)\nset.seed(1895)\nN &lt;- 400\n\ndata_mar &lt;-\n  tibble(\n    x = rnorm(N),\n    # 0.5 ist die Stärke des Zusammenhangs zwischen x und y_comp\n    y_comp = 2 + 0.1 * x + rnorm(N),\n    # Die Wahrscheinlichkeit, dass y_beob fehlt, hängt von x ab\n    r = rbinom(N, 1, prob = plogis(1 * x)),\n    y_beob = ifelse(r == 0, y_comp, NA),\n    y_mis = ifelse(r == 1, y_comp, NA)\n  )\n\n# Plot der randverteilungen von beobachteten und fehlenden Werten\nggplot(data_mar, aes(x = x, y = y_beob)) +\n  geom_miss_point() +\n  # Regression der beobachteten Werte\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#267326\") +\n  # Regression aller Werte (inkl. fehlende Werte, die hier als NA dargestellt werden)\n  geom_smooth(\n    aes(y = y_comp),\n    method = \"lm\",\n    se = FALSE,\n    color = \"#267326\",\n    linetype = \"dashed\"\n  ) +\n  # mean(y_comp)\n  geom_hline(\n    yintercept = mean(data_mar$y_comp, na.rm = TRUE),\n    linetype = \"dashed\",\n    color = \"#267326\"\n  ) +\n  # mean(y_beob)\n  geom_hline(\n    yintercept = mean(data_mar$y_beob, na.rm = TRUE),\n    color = \"#267326\"\n  ) +\n  labs(caption = \"Gestrichelte Linie entspricht der »wahren Regression«\") +\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: Removed 196 rows containing non-finite outside the scale range\n(`stat_smooth()`).\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\nbrm(y_comp ~ x, data = data_mar, silent = 2, refresh = 0)\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_comp ~ x \n   Data: data_mar (Number of observations: 400) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.11      0.05     2.02     2.21 1.00     4468     2860\nx             0.19      0.05     0.09     0.29 1.00     3817     2713\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.97      0.04     0.91     1.04 1.00     3767     2752\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nbrm(y_beob ~ x, data = data_mar, silent = 2, refresh = 0)\n\nWarning: Rows containing NAs were excluded from the model.\n\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_beob ~ x \n   Data: data_mar (Number of observations: 204) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.15      0.08     2.00     2.29 1.00     3867     2841\nx             0.18      0.07     0.04     0.32 1.00     4067     2683\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.96      0.05     0.87     1.06 1.00     3732     2985\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nbrm(bf(y_beob | mi() ~ x), data = data_mar, silent = 2, refresh = 0)\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_beob | mi() ~ x \n   Data: data_mar (Number of observations: 400) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.15      0.07     2.00     2.29 1.00     2929     3109\nx             0.18      0.07     0.03     0.33 1.00     2893     3003\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.96      0.05     0.87     1.06 1.00     1974     2386\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).",
+    "text": "1 Question\n\nÜbung \nWelche der Begriffe passen zum grün hervorgehobenen Teil der folgenden Abbildung?\n\n\n\n\n2 Meta-information\nexname: Grundbegriffe Regression erkennen extype: mchoice exsolution: 00000000000000000001111 exshuffle: 5"
+  },
+  {
+    "objectID": "exams/Deskriptive_Explorative_Explanative_Praediktive_Studien_Laengsschnitt.html",
+    "href": "exams/Deskriptive_Explorative_Explanative_Praediktive_Studien_Laengsschnitt.html",
+    "title": "1 Question",
+    "section": "",
+    "text": "1 Question\n\nÜbung \nWird in der folgenden Kurzbeschreibung eine deskriptive, explanative, explorative oder prädiktive Studie durchgeführt?\n\nFrühere Leistungsdaten, Motivation und Fehlzeiten werden genutzt, um vorherzusagen, welche Schülerinnen und Schüler im weiteren Verlauf ein erhöhtes Risiko für Leistungsabbrüche zeigen.\n\n\n\n\n2 Meta-information\nexname: Erkentnisinteresse in Forschungsfrage erkennen extype: schoice exsolution: 0001"
+  },
+  {
+    "objectID": "exams/Scatterplot-BESD-zuordnen.html",
+    "href": "exams/Scatterplot-BESD-zuordnen.html",
+    "title": "1 Question",
+    "section": "",
+    "text": "── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nAttaching package: 'kableExtra'\n\n\nThe following object is masked from 'package:dplyr':\n\n    group_rows\n\n\n\n1 Question\n\nÜbung \nIm folgenden ist die einfache lineare Regression von N = 286 Datenpunkten der Variable Sozioökonomischer Status (SES) auf die Variable Matheleistung (ML) dargestellt.\n\n\n\n\n\n\n\n\n\nGeben Sie in folgender Tabelle die vier Felder des Binomial Effect Size Display als Werte jeweils zwischen 0 und 1 an.\n\n\n\n\nunterdurchschn. SES\nüberdurchschn. SES\n\n\n\n\nüberdurchschn. ML\n##ANSWER1##\n##ANSWER2##\n\n\nunterdurchschn. ML\n##ANSWER3##\n##ANSWER4##\n\n\n\n\n\n\n2 Solution\n\n2.0.1 Lösung:\nDie auf zwei Nachkommastellen gerundeten wahren Zahlen sind:\n\n\n\n\n\n\nunterdurchschn. SES\nüberdurchschn. SES\n\n\n\n\nüberdurchschn. ML\n0.96\n0.04\n\n\nunterdurchschn. ML\n0.04\n0.96\n\n\n\n\n\n\nALs »korrekt« wird alles gekennezichent, was ±20% genau ist.\n\n\n\n\n3 Meta-information\nexname: Scatterplot-BESD-zuordnen extype: cloze exclozetype: num|num|num|num exsolution: 0.96|0.04|0.04|0.96 extol: 0.2|0.2|0.2|0.2"
+  },
+  {
+    "objectID": "exams/Laengsschnitttliche_Studie_erkennen.html",
+    "href": "exams/Laengsschnitttliche_Studie_erkennen.html",
+    "title": "1 Question",
+    "section": "",
+    "text": "Kreuzen Sie im Folgenden die Szenarien an, bei denen es sich um eine »echte« Längsschnittstudie handelt.\n\n\n\n\nEine Forschergruppe erhebt bei denselben 120 Lehrkräften an 15 Gemeinschaftsschulen im Jahr 2022 und erneut im Jahr 2025 deren lehr- lerntheoretische Überzeugungen, Selbstwirksamkeit und Nutzung digitaler Medien mittels identischem Fragebogen.\nIn einer Schule werden dieselben drei Klassen von Klasse 5 bis Klasse 8 jährlich mit dem ELFE II getestet, um die Entwicklung der Lesekompetenz der Schülerinnen und Schüler zu untersuchen.\nIm Rahmen eines Schulentwicklungsprogramms werden dieselben Schulleitungen vor der Einführung, ein Jahr nach der Einführung und drei Jahre nach der Einführung zu ihrem Führungsverständnis und zu Kooperationsstrukturen im Kollegium befragt.\nEine Studie begleitet dieselben Referendarinnen und Referendare vom Vorbereitungsdienst bis drei Jahre nach dem Berufseinstieg und erhebt wiederholt ihre Unterrichtsqualität mittels standardisierter Beobachtungsinstrumente.\nIn den Jahren 2018, 2020 und 2022 werden jeweils unterschiedliche Stichproben von Lehrkräften aus derselben Region zu ihrer Arbeitszufriedenheit befragt.\nEine Studie vergleicht die Lesekompetenz von Viertklässlern im Jahr 2015 mit der Lesekompetenz von Viertklässlern im Jahr 2023, um Veränderungen im Bildungssystem zu analysieren.\nAn einer Schule werden im Jahr 2024 alle Klassen einer Jahrgangsstufe befragt, wobei die Lehrkräfte gebeten werden, rückblickend einzuschätzen, wie sich ihr Unterricht in den letzten fünf Jahren verändert hat.\nEine Evaluation untersucht die Wirkung einer neuen Unterrichtsmethode, indem eine Jahrgangsstufe vor der Einführung und eine andere Jahrgangsstufe nach der Einführung getestet wird."
+  },
+  {
+    "objectID": "exams/Laengsschnitttliche_Studie_erkennen.html#answerlist",
+    "href": "exams/Laengsschnitttliche_Studie_erkennen.html#answerlist",
+    "title": "1 Question",
+    "section": "",
+    "text": "Eine Forschergruppe erhebt bei denselben 120 Lehrkräften an 15 Gemeinschaftsschulen im Jahr 2022 und erneut im Jahr 2025 deren lehr- lerntheoretische Überzeugungen, Selbstwirksamkeit und Nutzung digitaler Medien mittels identischem Fragebogen.\nIn einer Schule werden dieselben drei Klassen von Klasse 5 bis Klasse 8 jährlich mit dem ELFE II getestet, um die Entwicklung der Lesekompetenz der Schülerinnen und Schüler zu untersuchen.\nIm Rahmen eines Schulentwicklungsprogramms werden dieselben Schulleitungen vor der Einführung, ein Jahr nach der Einführung und drei Jahre nach der Einführung zu ihrem Führungsverständnis und zu Kooperationsstrukturen im Kollegium befragt.\nEine Studie begleitet dieselben Referendarinnen und Referendare vom Vorbereitungsdienst bis drei Jahre nach dem Berufseinstieg und erhebt wiederholt ihre Unterrichtsqualität mittels standardisierter Beobachtungsinstrumente.\nIn den Jahren 2018, 2020 und 2022 werden jeweils unterschiedliche Stichproben von Lehrkräften aus derselben Region zu ihrer Arbeitszufriedenheit befragt.\nEine Studie vergleicht die Lesekompetenz von Viertklässlern im Jahr 2015 mit der Lesekompetenz von Viertklässlern im Jahr 2023, um Veränderungen im Bildungssystem zu analysieren.\nAn einer Schule werden im Jahr 2024 alle Klassen einer Jahrgangsstufe befragt, wobei die Lehrkräfte gebeten werden, rückblickend einzuschätzen, wie sich ihr Unterricht in den letzten fünf Jahren verändert hat.\nEine Evaluation untersucht die Wirkung einer neuen Unterrichtsmethode, indem eine Jahrgangsstufe vor der Einführung und eine andere Jahrgangsstufe nach der Einführung getestet wird."
+  },
+  {
+    "objectID": "exams/methodische-strenge-vergleichen.html",
+    "href": "exams/methodische-strenge-vergleichen.html",
+    "title": "1 Question",
+    "section": "",
+    "text": "── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\n1 Question\n\nÜbung \nForschergruppe A hat an einer Stichprobe von 20 Grundschulen in Baden-Württemberg über drei Monate hinweg eine wöchentliche “bewegte Pause” für Lehrkräfte angeboten. Die Maßnahme wurde am Ende des Zeitraumes evaluiert und es zeigte sich, dass teilnehmende Lehrkräfte signifikant höhere Werte beim subjektiven Wohlbefinden in einem Fragebogen angaben, als zu Beginn der Maßnahme und auch im Vergleich zu einer Kontrollgruppe von Grundschullehrkräften, die ein solches Angebot nicht erhalten hatten. Die Forschenden leiten daraus eine Empfehlung zur Fortführung der Maßnahme ab.\nForschergruppe B hat an einer Stichprobe von 20 Grundschulen in ganz Deutschland über drei Monate hinweg eine wöchentliche “bewegte Pause” für Lehrkräfte angeboten. Die Maßnahme wurde am Ende des Zeitraumes evaluiert und es zeigte sich, dass teilnehmende Lehrkräfte signifikant höhere Werte beim subjektiven Wohlbefinden in einem Fragebogen angaben, als zu Beginn der Maßnahme und auch im Vergleich zu einer Kontrollgruppe von Grundschullehrkräften, die ein solches Angebot nicht erhalten hatten. Die Forschenden leiten daraus eine Empfehlung zur Fortführung der Maßnahme ab.\n\nWorin unterscheiden sich die beiden Studien?\n\n\n\n\n2 Solution\n\n\n3 Meta-information\nexname: Unterschied_wiss_Guetekrit_erkennen_2 extype: mchoice exsolution: 1000 exshuffle: true"
+  },
+  {
+    "objectID": "Nonsolutions.html",
+    "href": "Nonsolutions.html",
+    "title": "Nonsolutions",
+    "section": "",
+    "text": "1 Überblick\nIn den allermeistens Fällen sind\n\nCase und List Wise Deletion,\nMean Imputation und\nRegression Imputation\n\nproblematische Methoden zum Umgang mit fehlenden Werten, die zu verzerrten Ergebnissen führen können.\n\n\n\n\n\n\nNone Übung: Nonsolutions\n\n\n\n\nWarum kann die Verwendung von Case und List Wise Deletion selbst unter MCAR problematisch sein?\nWelche Probleme könnten bei der Verwendung von Mean oder Regression Imputation auftreten?",
     "crumbs": [
-      "Bayesian Imutation during Model Fitting"
-    ]
-  },
-  {
-    "objectID": "Bayesian Imputation During Model Fitting.html#umsetzung-in-brms",
-    "href": "Bayesian Imputation During Model Fitting.html#umsetzung-in-brms",
-    "title": "Bayesian Imutation during Model Fitting",
-    "section": "",
-    "text": "WarnungAchtung: stan-Installation notwendig\n\n\n\nIn den folgenden Beispielen wird das R-Paket {brms} verwendet. Dieses Paket basiert auf der probabilistischen Programmiersprache stan, die für die Durchführung von Bayesianischen Analysen notwendig ist. Die Installation von stan kann je nach Betriebssystem und R-Version komplex sein. Es wird empfohlen, diese Installationsanleitung zu befolgen.\n\n\nIn {brms} kann BIMF mit der mi()-Funktion implementiert werden, die es ermöglicht, fehlende Werte als zusätzliche Parameter in das Modell zu integrieren. Hier ist ein einfaches Beispiel, wie dies umgesetzt werden kann:\n\nlibrary(brms)\n\nLoading required package: Rcpp\n\n\nLoading 'brms' package (version 2.23.0). Useful instructions\ncan be found by typing help('brms'). A more detailed introduction\nto the package is available through vignette('brms_overview').\n\n\n\nAttaching package: 'brms'\n\n\nThe following object is masked from 'package:stats':\n\n    ar\n\nlibrary(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.0     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.1     \n\n\n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(naniar)\nset.seed(1895)\nN &lt;- 400\n\ndata_mar &lt;-\n  tibble(\n    x = rnorm(N),\n    # 0.5 ist die Stärke des Zusammenhangs zwischen x und y_comp\n    y_comp = 2 + 0.1 * x + rnorm(N),\n    # Die Wahrscheinlichkeit, dass y_beob fehlt, hängt von x ab\n    r = rbinom(N, 1, prob = plogis(1 * x)),\n    y_beob = ifelse(r == 0, y_comp, NA),\n    y_mis = ifelse(r == 1, y_comp, NA)\n  )\n\n# Plot der randverteilungen von beobachteten und fehlenden Werten\nggplot(data_mar, aes(x = x, y = y_beob)) +\n  geom_miss_point() +\n  # Regression der beobachteten Werte\n  geom_smooth(method = \"lm\", se = FALSE, color = \"#267326\") +\n  # Regression aller Werte (inkl. fehlende Werte, die hier als NA dargestellt werden)\n  geom_smooth(\n    aes(y = y_comp),\n    method = \"lm\",\n    se = FALSE,\n    color = \"#267326\",\n    linetype = \"dashed\"\n  ) +\n  # mean(y_comp)\n  geom_hline(\n    yintercept = mean(data_mar$y_comp, na.rm = TRUE),\n    linetype = \"dashed\",\n    color = \"#267326\"\n  ) +\n  # mean(y_beob)\n  geom_hline(\n    yintercept = mean(data_mar$y_beob, na.rm = TRUE),\n    color = \"#267326\"\n  ) +\n  labs(caption = \"Gestrichelte Linie entspricht der »wahren Regression«\") +\n  theme_minimal()\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\nWarning: Removed 196 rows containing non-finite outside the scale range\n(`stat_smooth()`).\n\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\n\n\nbrm(y_comp ~ x, data = data_mar, silent = 2, refresh = 0)\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_comp ~ x \n   Data: data_mar (Number of observations: 400) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.11      0.05     2.02     2.21 1.00     4468     2860\nx             0.19      0.05     0.09     0.29 1.00     3817     2713\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.97      0.04     0.91     1.04 1.00     3767     2752\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nbrm(y_beob ~ x, data = data_mar, silent = 2, refresh = 0)\n\nWarning: Rows containing NAs were excluded from the model.\n\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_beob ~ x \n   Data: data_mar (Number of observations: 204) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.15      0.08     2.00     2.29 1.00     3867     2841\nx             0.18      0.07     0.04     0.32 1.00     4067     2683\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.96      0.05     0.87     1.06 1.00     3732     2985\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).\n\nbrm(bf(y_beob | mi() ~ x), data = data_mar, silent = 2, refresh = 0)\n\n Family: gaussian \n  Links: mu = identity \nFormula: y_beob | mi() ~ x \n   Data: data_mar (Number of observations: 400) \n  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;\n         total post-warmup draws = 4000\n\nRegression Coefficients:\n          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nIntercept     2.15      0.07     2.00     2.29 1.00     2929     3109\nx             0.18      0.07     0.03     0.33 1.00     2893     3003\n\nFurther Distributional Parameters:\n      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS\nsigma     0.96      0.05     0.87     1.06 1.00     1974     2386\n\nDraws were sampled using sampling(NUTS). For each parameter, Bulk_ESS\nand Tail_ESS are effective sample size measures, and Rhat is the potential\nscale reduction factor on split chains (at convergence, Rhat = 1).",
-    "crumbs": [
-      "Bayesian Imutation during Model Fitting"
-    ]
-  },
-  {
-    "objectID": "exams/regressionsebene-interpretieren.html",
-    "href": "exams/regressionsebene-interpretieren.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "1 Question\n\nÜbung \nBetrachten Sie die interaktive 3D-Visualisierung der multiplen Regression aus dem Abschnitt “Geometrische Repräsentation der multiplen Regression”.\nWelche der folgenden Aussagen ist korrekt?\n\n\n\n2 Solution\n\n\n3 Meta-information\nexname: 3d regressionsebene interpretieren extype: mchoice exsolution: 110101 exshuffle: TRUE ```"
-  },
-  {
-    "objectID": "exams/Deskriptive_Explorative_Explanative_Studien_r.html",
-    "href": "exams/Deskriptive_Explorative_Explanative_Studien_r.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "1 Question\n\nÜbung \nEin Forscherteam untersucht die Anzahl von Schüler*innen mit Deutsch als Zweitsprache in den verschiedenen Stadtteilen von Karlsruhe. Wird dabei eine deskriptive, explanative oder explorative Studie durchgeführt?\n\n\n\n2 Meta-information\nexname: Erkentnisinteresse in Forschungsfrage erkennen extype: schoice exsolution: 100"
-  },
-  {
-    "objectID": "exams/einfache-reg-rechteck.html",
-    "href": "exams/einfache-reg-rechteck.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\n1 Question\n\nÜbung \nErzeugen Sie in der interaktiven Visualisierung genau vier Punkte und zwar (-3;0), (-3;4), (0;0), (0;4).\n\nDas Intercept \\(b_0\\) der dadurch entstehenden Regressionsgerade beträgt dann ##ANSWER1##.\nWarum zeigt diesen Beispiel, dass das ebenfalls naheliegende Optimierungkriterium der Summe der kleinsten Residualbeträge \\(\\sum_{i=1}^{N} \\left| \\varepsilon_i \\right|\\) problematisch wäre?\n\n\n\n\n2 Solution\nEs lässt sich beweisen, dass die Regressionsgerade - bestimmt durch die Summe der kleinsten Quadrate - immer den »Schwerpunkt« der Punktewolke \\(\\left(\\bar{x}; \\bar{y}\\right)\\) enthält. Da die Punkte ein Rechteck mit Kanten parallel zu den Koordinatenachsen darstellen, ist \\(b_1 = 0\\) und daher \\(b_0 = \\bar{y}\\).\nWäre das Optimierungskriterium für \\(b_0\\) und \\(b_1\\) die Summe der Residuenbeträge \\(\\sum_{i=1}^{N} \\left| \\varepsilon_i \\right|\\) wäre jede Regressionsgerade mit \\(b_1 = 0\\) und \\(min(x_i) &lt; b_0 &lt; max(x_i)\\) »gleich optimal« - die Regressionsgerade wäre also nicht eindeutig bestimmt.\n\n\n3 Meta-information\nexname: einfache reg rechteck extype: cloze exclozetype: num exsolution: 2 extol: 0.01"
-  },
-  {
-    "objectID": "exams/g3classsize_g3tmathss_graph_sc.html",
-    "href": "exams/g3classsize_g3tmathss_graph_sc.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "1 Question\n\nÜbung \nWelche Aussagen treffen auf obige Abbildung zu?\n\n\n\n2 Solution\n\n\n3 Meta-information\nexname: g3classsize_g3tmathss_graph_sc extype: mchoice exsolution: 110111"
-  },
-  {
-    "objectID": "exams/BESD-Scatterplot-zuordnen.html",
-    "href": "exams/BESD-Scatterplot-zuordnen.html",
-    "title": "1 Question",
-    "section": "",
-    "text": "── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.6\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.1     ✔ tibble    3.3.1\n✔ lubridate 1.9.4     ✔ tidyr     1.3.2\n✔ purrr     1.2.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\n\n1 Question\n\nÜbung \nWelche der folgenden Abbildungen passt am besten zu dem Bimonial Effect Size Display?\n\n\n\n\n\nGruppe\nErfolg\nMisserfolg\n\n\n\n\nTreatment\n0.8\n0.2\n\n\nKontrolle\n0.2\n0.8\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n2 Solution\n\n\n3 Meta-information\nexname: BESD-Scatterplot-zuordnen extype: schoice exsolution: 01"
-  },
-  {
-    "objectID": "Multiple Imputation.html",
-    "href": "Multiple Imputation.html",
-    "title": "Multiple Imputation",
-    "section": "",
-    "text": "Die multiple Imputation (MI) ist eine sehr mächtige Methode zum Umgang mit fehlenden Werten, die auf der Idee basiert, mehrere plausible Werte für die fehlenden Daten zu generieren. Diese Methode wurde von Rubin (1976) entwickelt und hat sich seitdem als eine der Standardmethoden für den Umgang mit fehlenden Daten etabliert. MI besteht aus drei Hauptschritten (siehe Abbildung 1):\n\nImputation: In diesem Schritt werden mehrere vollständige Datensätze generiert, indem fehlende Werte durch plausible Werte ersetzt werden. Dies geschieht in der Regel durch die Verwendung von Modellen, die auf den beobachteten Daten basieren, um die fehlenden Werte zu schätzen. Es können verschiedene Imputationsmodelle verwendet werden, z.B. lineare Regression, logistische Regression, ordinale Regression, predictive mean matching oder Random Forests.\nAnalyse: Jeder der generierten vollständigen Datensätze wird einzeln analysiert, z.B. durch die Schätzung von Regressionsmodellen, Effektstärken, Hypothesentests.\nPooling: Die Ergebnisse der Analysen der einzelnen Datensätze werden anschließend zusammengeführt, um eine einzige Schätzung und Inferenzstatistik zu erhalten. Hierzu werden spezielle Pooling-Methoden verwendet, die die Unsicherheit berücksichtigen, die durch die Imputation der fehlenden Werte entsteht.\n\n\n\n\n\n\n\nAbbildung 1: Workflow des Missing Data Handling mit multipler Imputation\n\n\n\nIm Umfeld des {mice}-Packages in R ist zu diesem Workflow auch die folgende Terminologie gebräuchlich geworden:\n\nTerminologie im Umfeld von {mice} (siehe Buuren (2018))\n\n\n\n\n\n\n\n\nKlasse in {mice}\nHäufiges Objekt Suffix\n{mice}-Funktion\nBeschreibung\n\n\n\n\nmids\nimp\nmice()\nMultipel imputierter Datensatz\n\n\nmild\nidl\ncomplete()\nListe multipel imputierter Daten\n\n\nmira\nfit\nwith()\nWiederholte Analysen mit multipler Imputation\n\n\nmipo\nest\npool()\nPooling der Ergebnisse aus multipler Imputation",
-    "crumbs": [
-      "Multiple Imputation"
-    ]
-  },
-  {
-    "objectID": "Multiple Imputation.html#datengrundlage",
-    "href": "Multiple Imputation.html#datengrundlage",
-    "title": "Multiple Imputation",
-    "section": "3.1 Datengrundlage",
-    "text": "3.1 Datengrundlage\nAls Datengrundlage verwenden wir einen Ausschnitt des STAR-Experiments, indem die experimentell die Wirkung einer Klassengrößenreduktion auf die Schulleistung untersucht wurde (Word, 1990). Um zunächst das Problem genesteter Daten zu umgehen, verwenden wir nur die Daten je einer Schüler:in pro Klasse. Die Daten enthalten die folgenden Variablen:\n\nlibrary(haven)\nlibrary(dplyr)\nlibrary(codebook)\n\ndata_star &lt;- read_sav(\n  \"https://raw.githubusercontent.com/sammerk/GRAPH-Missing-Data/master/data_missing_workshop.sav\"\n)\n\nlabel_browser_static(data_star)",
-    "crumbs": [
-      "Multiple Imputation"
+      "Nonsolutions"
     ]
   }
 ]

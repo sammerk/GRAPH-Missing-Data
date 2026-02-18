@@ -46,7 +46,85 @@ Im Umfeld des `{mice}`-Packages in R ist zu diesem Workflow auch die folgende Te
 Im oben beschriebenen Workflow ist die multiple Imputation besonders herausfordernd. Sie muss auf die diversen Arten (Skalenniveau, Kontinuität) und Verteilungen von Daten angepasst werden, die Missingness Patterns berücksichtigen und jeweils **alle** Prädiktoren der Missingness enthalten.
 Diese Schritte werden im folgenden Beispiel Schritt für Schritt bearbeitet
 
-# Ein `{mice}`-Beispiel
+# Ein artifizielles `{mice}`-Beispiel
+## Datengrundlage
+```{r}
+library(tidyverse)
+
+N <- 1000
+
+data_art <-
+  tibble(
+    x_comp = rnorm(N),
+    y_comp = 2 + 0.5 * x_comp + rnorm(N),
+    r_y = rbinom(N, 1, prob = plogis(.2 + 3 * x_comp)),
+    r_x = rbinom(N, 1, prob = plogis(4 - 3 * y_comp)),
+    y_beob = ifelse(r_y == 0, y_comp, NA),
+    x_beob = x_comp
+  )
+```
+
+## Missingness Pattern
+```{r}
+library(naniar)
+vis_miss(data_art, sort_miss = TRUE, cluster = TRUE) +
+  theme(plot.margin = margin(t = 20, r = 10, b = 10, l = 10))
+```
+
+## Missingness Mechanism
+```{r}
+ggplot(data_art, aes(x = x_beob, y = y_beob)) +
+  geom_miss_point(jitter = 0.1) +
+  theme_minimal()
+```
+
+
+## Imputation
+```{r}
+library(mice)   
+data_art_imp <- mice(
+  data_art %>% select(x_beob, y_beob), 
+  m = 5, 
+  seed = 1895
+)
+summary(data_art_imp)
+```
+
+## Visual Check des Imputationsalgorithmus
+```{r}
+plot(data_art_imp)
+```
+
+## Visual Check der Imputation
+```{r}
+library(ggmice)
+plot_flux(data_art %>% select(x_beob, y_beob))
+mice::xyplot(data_art_imp, y_beob ~ x_beob)
+```
+
+## Vergleich Regressionsanalytischer Ergebnisse
+### Gepoolte Imputierte Regression
+```{r}
+reg_fit <- with(data_art_imp, lm(y_beob ~ x_beob))
+summary(reg_fit)
+reg_fit
+```
+
+```{r}
+reg_est <- pool(reg_fit)
+summary(reg_est)
+reg_est
+```
+
+### Listwise Deletion und vollständige Daten
+```{r}
+reg_listwise <- lm(y_beob ~ x_beob, data = data_art)
+reg_comp <- lm(y_comp ~ x_comp, data = data_art)
+sjPlot::tab_model(reg_listwise, reg_comp, show.std = T, show.ci = F)
+```
+
+
+# Ein »Real World« `{mice}`-Beispiel
 
 ## Datengrundlage
 Als Datengrundlage verwenden wir einen Ausschnitt des STAR-Experiments, indem die experimentell die Wirkung einer Klassengrößenreduktion auf die Schulleistung untersucht wurde [@word1990].
@@ -79,6 +157,7 @@ vis_miss(data_star, sort_miss = TRUE, cluster = TRUE)
 
 ## (Co-)Variation und Verteilung der Daten
 ```{r}
+#| eval: false
 library(GGally)
 ggpairs(
   data_star %>% 
@@ -89,19 +168,33 @@ ggpairs(
 
 ## Missing Mechanisms
 ```{r}
+#| eval: false
 library(ggplot2)
 library(ggmice)
-ggplot(data_star, aes(x = g3freelunch, y = g3tmathss)) +
+ggplot(data_star, aes(x = g3tmathss, y = g4ptimpt)) +
   geom_miss_point(jitter = 0.1) +
   theme_minimal()
+
+ggplot(data_star, aes(x = g3tmathss, y = g3freelunch)) +
+  geom_miss_point(jitter = 0.1) +
+  theme_minimal()
+
+mcar_test(data_star)
 ```
 
 ## Imputation
 ```{r}
+#| eval: false
 library(mice)   
+data_star_unlabeled <- data_star %>% 
+    sjlabelled::remove_all_labels()
 
 data_star_imp <- mice(
-  data_star %>% select(-g3tchid), 
+  data_star_unlabeled %>% select(-g3tchid, -classID), 
   m = 5, 
   seed = 1895
 )
+summary(data_star_imp)
+plot_flux(data_star_unlabeled)
+```
+
