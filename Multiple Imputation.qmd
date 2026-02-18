@@ -158,18 +158,16 @@ vis_miss(data_star, sort_miss = TRUE, cluster = TRUE)
 
 ## (Co-)Variation und Verteilung der Daten
 ```{r}
-#| eval: false
 library(GGally)
 ggpairs(
   data_star %>% 
-    select(starts_with("g4"), -g4tchid, g3freelunch, g3classsize) %>% 
+    select(starts_with("g4"), g3freelunch, g3classsize) %>% 
     mutate(across(c(starts_with("g4pt"), g3freelunch), as.factor))
 )
 ```
 
 ## Missing Mechanisms
 ```{r}
-#| eval: false
 library(ggplot2)
 library(ggmice)
 ggplot(data_star, aes(x = g3tmathss, y = g4ptimpt)) +
@@ -180,15 +178,16 @@ ggplot(data_star, aes(x = g3tmathss, y = g3freelunch)) +
   geom_miss_point(jitter = 0.1) +
   theme_minimal()
 
-mcar_test(data_star)
+mcar_test(data_star %>% select(g4ptimpt, g3tmathss, g3freelunch, g3classsize))
 ```
 
 ## Imputation
 ```{r}
-#| eval: false
 library(mice)   
 data_star_unlabeled <- data_star %>% 
-    sjlabelled::remove_all_labels()
+    sjlabelled::remove_all_labels() %>% 
+    as_tibble() %>% 
+    mutate(across(c(g3classtype, g3freelunch), as.factor))
 
 data_star_imp <- mice(
   data_star_unlabeled %>% select(-g3tchid, -classID), 
@@ -199,3 +198,12 @@ summary(data_star_imp)
 plot_flux(data_star_unlabeled)
 ```
 
+## Analyse
+```{r}
+reg_fit <- with(data_star_imp, lm(scale(g4ptimpt) ~ scale(g3tmathss) + g3freelunch + scale(g3classsize)))
+summary(reg_fit)
+
+reg_est <- pool(reg_fit)
+summary(reg_est)
+reg_est
+```
